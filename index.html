@@ -49,114 +49,66 @@
         }
     </style>
 
+    <!-- =====================================================
+         LINK TO STYLE.CSS
+    ====================================================== -->
+    <link rel="stylesheet" href="style.css">
+
 </head>
 
-<body 
-    id="app-body"
-    data-app-state="boot"
-    data-active-screen="home"
->
+<body id="app-body" data-app-state="boot">
 
 <!-- =====================================================
      APP ROOT (EVERYTHING LIVES HERE)
 ===================================================== -->
 <div id="app-root" role="application" aria-label="EchoAI App">
 
-    <!-- =================================================
-         SYSTEM / BACKGROUND LAYER
-    ================================================== -->
+    <!-- SYSTEM / BACKGROUND LAYER -->
     <div id="system-layer">
-
-        <!-- Network / permission / background indicators -->
         <div id="system-network-status"></div>
         <div id="system-permission-status"></div>
         <div id="system-background-indicator"></div>
-
-        <!-- Android / browser back key capture -->
         <div id="back-handler" tabindex="-1"></div>
-
     </div>
 
-    <!-- =================================================
-         BOOT / SPLASH SCREEN
-    ================================================== -->
-    <section 
-        id="screen-boot"
-        class="screen screen-active"
-        data-screen="boot"
-        aria-hidden="false"
-    >
+    <!-- BOOT / SPLASH SCREEN -->
+    <section id="screen-boot" class="screen screen-active" data-screen="boot" aria-hidden="false">
         <div class="boot-wrapper">
-
             <div id="boot-orb"></div>
-
             <h1 id="boot-title">EchoAI</h1>
             <p id="boot-tagline">Listening. Understanding. Acting.</p>
-
             <div id="boot-loader">
                 <div class="boot-progress"></div>
             </div>
-
         </div>
     </section>
 
-    <!-- =================================================
-         MAIN APP CONTAINER
-    ================================================== -->
-    <main 
-        id="main-app"
-        aria-hidden="true"
-    >
+    <!-- MAIN APP CONTAINER -->
+    <main id="main-app" aria-hidden="true">
 
-        <!-- =============================================
-             TOP STATUS BAR
-        ============================================== -->
+        <!-- TOP STATUS BAR -->
         <header id="top-status-bar">
-
             <div class="status-left">
                 <span id="status-time"></span>
             </div>
-
             <div class="status-center">
                 <span id="status-emotion"></span>
             </div>
-
             <div class="status-right">
                 <span id="status-battery"></span>
             </div>
-
         </header>
 
-        <!-- =============================================
-             SCREEN STACK (ALL SCREENS EXIST TOGETHER)
-        ============================================== -->
+        <!-- SCREEN STACK -->
         <section id="screen-stack">
 
             <!-- HOME -->
-            <section 
-                id="screen-home"
-                class="screen"
-                data-screen="home"
-                aria-hidden="true"
-            >
-                <div class="screen-header">
-                    <h2>Home</h2>
-                </div>
-
+            <section id="screen-home" class="screen" data-screen="home" aria-hidden="true">
+                <div class="screen-header"><h2>Home</h2></div>
                 <div class="home-core">
-
-                    <div 
-                        id="echo-orb-main"
-                        role="button"
-                        aria-label="Activate EchoAI"
-                    ></div>
-
-                    <p class="home-hint">
-                        Tap or say “Hey Echo”
-                    </p>
-
+                    <div id="echo-orb-main" role="button" aria-label="Activate EchoAI"></div>
+                    <p class="home-hint">Tap or say “Hey Echo”</p>
                 </div>
-
                 <div class="home-actions">
                     <button data-action="talk">Talk</button>
                     <button data-action="mood">Mood</button>
@@ -166,88 +118,35 @@
             </section>
 
             <!-- EXPLORE -->
-            <section 
-                id="screen-explore"
-                class="screen"
-                data-screen="explore"
-                aria-hidden="true"
-            >
-                <div class="screen-header">
-                    <h2>Explore</h2>
-                </div>
-
+            <section id="screen-explore" class="screen" data-screen="explore" aria-hidden="true">
+                <div class="screen-header"><h2>Explore</h2></div>
                 <div class="explore-grid">
-
-                    <div class="explore-card" data-feature="empathy">
-                        <h3>Empathy Engine</h3>
-                    </div>
-
-                    <div class="explore-card" data-feature="voice">
-                        <h3>Voice Control</h3>
-                    </div>
-
-                    <div class="explore-card" data-feature="automation">
-                        <h3>Automation</h3>
-                    </div>
-
-                    <div class="explore-card" data-feature="insights">
-                        <h3>Insights</h3>
-                    </div>
-
+                    <div class="explore-card" data-feature="empathy"><h3>Empathy Engine</h3></div>
+                    <div class="explore-card" data-feature="voice"><h3>Voice Control</h3></div>
+                    <div class="explore-card" data-feature="automation"><h3>Automation</h3></div>
+                    <div class="explore-card" data-feature="insights"><h3>Insights</h3></div>
                 </div>
             </section>
 
             <!-- CHAT -->
-            <section 
-                id="screen-chat"
-                class="screen"
-                data-screen="chat"
-                aria-hidden="true"
-            >
-                <div class="screen-header">
-                    <h2>Echo</h2>
-                </div>
-
+            <section id="screen-chat" class="screen" data-screen="chat" aria-hidden="true">
+                <div class="screen-header"><h2>Echo</h2></div>
                 <div id="chat-log" aria-live="polite"></div>
-
                 <div class="chat-input-bar">
-
-                    <input 
-                        type="text"
-                        id="chat-input"
-                        placeholder="Type or speak..."
-                        autocomplete="off"
-                    >
-
+                    <input type="text" id="chat-input" placeholder="Type or speak..." autocomplete="off">
                     <button id="chat-send-btn">Send</button>
-
-                    <button 
-                        id="chat-voice-btn"
-                        aria-label="Voice Command"
-                    ></button>
-
+                    <button id="chat-voice-btn" aria-label="Voice Command"></button>
                 </div>
             </section>
+
             <!-- PROFILE -->
-            <section 
-                id="screen-profile"
-                class="screen"
-                data-screen="profile"
-                aria-hidden="true"
-            >
-                <div class="screen-header">
-                    <h2>Profile</h2>
-                </div>
-
+            <section id="screen-profile" class="screen" data-screen="profile" aria-hidden="true">
+                <div class="screen-header"><h2>Profile</h2></div>
                 <div class="profile-core">
-
                     <div class="profile-avatar" role="img" aria-label="User Avatar"></div>
-
                     <h3 id="profile-username">Joshua</h3>
                     <p class="profile-status">EchoAI is learning you</p>
-
                 </div>
-
                 <div class="profile-actions">
                     <button data-profile-action="edit">Edit Profile</button>
                     <button data-profile-action="voice">Voice Preferences</button>
@@ -257,237 +156,82 @@
             </section>
 
             <!-- SETTINGS -->
-            <section 
-                id="screen-settings"
-                class="screen"
-                data-screen="settings"
-                aria-hidden="true"
-            >
-                <div class="screen-header">
-                    <h2>Settings</h2>
-                </div>
-
+            <section id="screen-settings" class="screen" data-screen="settings" aria-hidden="true">
+                <div class="screen-header"><h2>Settings</h2></div>
                 <div class="settings-list">
-
-                    <div class="setting-item">
-                        <span>Always Listening Mode</span>
-                        <button data-toggle="always-listening"></button>
-                    </div>
-
-                    <div class="setting-item">
-                        <span>Background Activity</span>
-                        <button data-toggle="background"></button>
-                    </div>
-
-                    <div class="setting-item">
-                        <span>Emotion Detection</span>
-                        <button data-toggle="emotion"></button>
-                    </div>
-
-                    <div class="setting-item">
-                        <span>Voice Wake Word</span>
-                        <button data-toggle="wakeword"></button>
-                    </div>
-
-                    <div class="setting-item">
-                        <span>Notifications</span>
-                        <button data-toggle="notifications"></button>
-                    </div>
-
+                    <div class="setting-item"><span>Always Listening Mode</span><button data-toggle="always-listening"></button></div>
+                    <div class="setting-item"><span>Background Activity</span><button data-toggle="background"></button></div>
+                    <div class="setting-item"><span>Emotion Detection</span><button data-toggle="emotion"></button></div>
+                    <div class="setting-item"><span>Voice Wake Word</span><button data-toggle="wakeword"></button></div>
+                    <div class="setting-item"><span>Notifications</span><button data-toggle="notifications"></button></div>
                 </div>
             </section>
 
         </section> <!-- END SCREEN STACK -->
 
-        <!-- =============================================
-             BOTTOM NAVIGATION (FIXED, ALWAYS PRESENT)
-        ============================================== -->
-        <nav 
-            id="bottom-navigation"
-            role="navigation"
-            aria-label="Main Navigation"
-        >
-
-            <button data-nav="home" aria-label="Home">
-                <span>Home</span>
-            </button>
-
-            <button data-nav="explore" aria-label="Explore">
-                <span>Explore</span>
-            </button>
-
-            <button data-nav="chat" aria-label="Echo">
-                <span>Echo</span>
-            </button>
-
-            <button data-nav="profile" aria-label="Profile">
-                <span>Profile</span>
-            </button>
-
-            <button data-nav="settings" aria-label="Settings">
-                <span>Settings</span>
-            </button>
-
+        <!-- BOTTOM NAVIGATION -->
+        <nav id="bottom-navigation" role="navigation" aria-label="Main Navigation">
+            <button data-nav="home" aria-label="Home"><span>Home</span></button>
+            <button data-nav="explore" aria-label="Explore"><span>Explore</span></button>
+            <button data-nav="chat" aria-label="Echo"><span>Echo</span></button>
+            <button data-nav="profile" aria-label="Profile"><span>Profile</span></button>
+            <button data-nav="settings" aria-label="Settings"><span>Settings</span></button>
         </nav>
 
     </main>
 
-    <!-- =================================================
-         GLOBAL OVERLAYS & SYSTEM UI
-    ================================================== -->
-
-    <!-- VOICE LISTENING OVERLAY -->
-    <div 
-        id="voice-overlay"
-        aria-hidden="true"
-    >
+    <!-- GLOBAL OVERLAYS -->
+    <div id="voice-overlay" aria-hidden="true">
         <div class="voice-orb"></div>
         <p class="voice-status">Listening…</p>
     </div>
 
-    <!-- PERMISSION MODAL -->
-    <div 
-        id="permission-modal"
-        role="dialog"
-        aria-hidden="true"
-    >
+    <div id="permission-modal" role="dialog" aria-hidden="true">
         <div class="modal-content">
             <h3>Permissions Required</h3>
             <p>EchoAI needs microphone and background access.</p>
-            <button data-permission="grant">Grant</button>
+            <button data-permission="allow">Allow</button>
             <button data-permission="deny">Deny</button>
         </div>
     </div>
 
-    <!-- NOTIFICATION TOAST -->
-    <div 
-        id="toast-container"
-        aria-live="assertive"
-    ></div>
+    <div id="toast-container" aria-live="assertive"></div>
+    <div id="system-banner" aria-hidden="true"><span id="system-message"></span></div>
 
-    <!-- OFFLINE / ERROR BANNER -->
-    <div 
-        id="system-banner"
-        aria-hidden="true"
-    >
-        <span id="system-message"></span>
-    </div>
+    <!-- SAFE AREAS -->
+    <div id="safe-area-top"></div>
+    <div id="safe-area-bottom"></div>
+
+    <!-- SYSTEM / DEV FALLBACKS -->
+    <div id="keyboard-detector" aria-hidden="true"></div>
+    <div id="gesture-blocker" tabindex="-1" aria-hidden="true"></div>
+    <div tabindex="0" id="focus-trap-start"></div>
+    <div tabindex="0" id="focus-trap-end"></div>
+    <div id="background-heartbeat" data-heartbeat="active" aria-hidden="true"></div>
+    <div id="app-lifecycle" data-state="awake" aria-hidden="true"></div>
+
+    <!-- RECOVERY SCREEN -->
+    <section id="screen-recovery" class="screen" data-screen="recovery" aria-hidden="true">
+        <div class="recovery-wrapper">
+            <h2>Recovering EchoAI</h2>
+            <p>Please wait while the app restores safely.</p>
+            <button data-recovery="restart">Restart</button>
+        </div>
+    </section>
+
+    <!-- NOSCRIPT FALLBACK -->
+    <noscript>
+        <div style="padding:20px;text-align:center;">
+            EchoAI requires JavaScript to function properly.
+        </div>
+    </noscript>
 
 </div> <!-- END APP ROOT -->
 
 <!-- =====================================================
-     SAFETY SCRIPT PLACEHOLDERS (INLINE, NO EXTERNAL FILES)
+     SCRIPT LINK
 ===================================================== -->
-<script>
-/* 
-  This script block intentionally exists INSIDE index.html.
-  All logic will attach here later without structural changes.
-*/
+<script src="script.js" defer></script>
 
-document.addEventListener("DOMContentLoaded", () => {
-    document.body.dataset.appState = "ready";
-});
-</script>
-<!-- =====================================================
-     EDGE-CASE & SYSTEM SAFETY LAYER (DO NOT REMOVE)
-===================================================== -->
-
-<!-- SAFE AREA SUPPORT (NOTCH / CUTOUT DEVICES) -->
-<div id="safe-area-top"></div>
-<div id="safe-area-bottom"></div>
-
-<!-- KEYBOARD RESIZE DETECTOR -->
-<div 
-    id="keyboard-detector"
-    aria-hidden="true"
-></div>
-
-<!-- GESTURE / SWIPE BLOCKER (ANDROID & IOS) -->
-<div 
-    id="gesture-blocker"
-    tabindex="-1"
-    aria-hidden="true"
-></div>
-
-<!-- FOCUS TRAPS (PREVENT UI FREEZE / LOST INPUT) -->
-<div tabindex="0" id="focus-trap-start"></div>
-<div tabindex="0" id="focus-trap-end"></div>
-
-<!-- BACKGROUND HEARTBEAT (ALWAYS-ON APP STATE) -->
-<div 
-    id="background-heartbeat"
-    data-heartbeat="active"
-    aria-hidden="true"
-></div>
-
-<!-- APP SLEEP / WAKE STATE -->
-<div 
-    id="app-lifecycle"
-    data-state="awake"
-    aria-hidden="true"
-></div>
-
-<!-- EMERGENCY FALLBACK SCREEN -->
-<section 
-    id="screen-recovery"
-    class="screen"
-    data-screen="recovery"
-    aria-hidden="true"
->
-    <div class="recovery-wrapper">
-        <h2>Recovering EchoAI</h2>
-        <p>Please wait while the app restores safely.</p>
-        <button data-recovery="restart">Restart</button>
-    </div>
-</section>
-
-<!-- ACCESSIBILITY FALLBACK -->
-<noscript>
-    <div style="padding:20px;text-align:center;">
-        EchoAI requires JavaScript to function properly.
-    </div>
-</noscript>
-
-<!-- =====================================================
-     LOW-LEVEL SYSTEM HOOKS (INLINE, FINAL)
-===================================================== -->
-<script>
-/* 
-  SYSTEM SAFETY & EDGE-CASE HANDLERS
-  These exist so logic can be attached later
-  WITHOUT touching index.html ever again.
-*/
-
-(function () {
-
-    /* Prevent double-tap zoom */
-    document.addEventListener("touchend", function (e) {
-        const now = Date.now();
-        if (this.lastTouch && now - this.lastTouch < 300) {
-            e.preventDefault();
-        }
-        this.lastTouch = now;
-    }, false);
-
-    /* Capture Android back navigation safely */
-    window.history.pushState(null, "", window.location.href);
-    window.addEventListener("popstate", function () {
-        document.body.dataset.backPressed = "true";
-        window.history.pushState(null, "", window.location.href);
-    });
-
-    /* Track app visibility */
-    document.addEventListener("visibilitychange", () => {
-        const state = document.hidden ? "sleep" : "awake";
-        document.getElementById("app-lifecycle").dataset.state = state;
-    });
-
-    /* Keyboard resize detection */
-    window.addEventListener("resize", () => {
-        document.body.dataset.viewportHeight = window.innerHeight;
-    });
-
-})();
-</script>
 </body>
 </html>
