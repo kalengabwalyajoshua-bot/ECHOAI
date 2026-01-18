@@ -1,47 +1,73 @@
 /* =============================================
-   ECHOAI FULL SCRIPT.JS (INITAPP VERSION)
+   ECHOAI ULTRA-SAFE SCRIPT.JS
+   Joshua Bwalya — GitHub Pages ready
 ============================================= */
 
 function initApp() {
 
     /* =====================
-       GLOBAL VARIABLES
+       GET DOM ELEMENTS SAFELY
     ==================== */
-    let currentScreen = "home";
-    const screens = document.querySelectorAll(".screen");
-    const navButtons = document.querySelectorAll("#bottom-navigation button");
-    const chatInput = document.getElementById("chat-input");
-    const chatSendBtn = document.getElementById("chat-send-btn");
-    const chatLog = document.getElementById("chat-log");
-    const voiceOverlay = document.getElementById("voice-overlay");
-    const recoveryScreen = document.getElementById("screen-recovery");
+    const getEl = (selector, desc) => {
+        const el = document.querySelector(selector);
+        if(!el) console.error(`Missing element: ${desc} (${selector})`);
+        return el;
+    };
 
-    const permissionModal = document.getElementById("permission-modal");
-    const permissionAllowBtn = document.querySelector("[data-permission='allow']");
-    const permissionDenyBtn = document.querySelector("[data-permission='deny']");
+    const getAll = (selector, desc) => {
+        const els = document.querySelectorAll(selector);
+        if(!els.length) console.error(`Missing elements: ${desc} (${selector})`);
+        return els;
+    };
 
-    const bootScreen = document.getElementById("screen-boot");
-    const bootProgress = document.querySelector(".boot-progress");
-    const backgroundHeartbeat = document.getElementById("background-heartbeat");
+    const screens = getAll(".screen", "Screens");
+    const navButtons = getAll("#bottom-navigation button", "Bottom Nav Buttons");
+
+    const chatInput = getEl("#chat-input", "Chat Input");
+    const chatSendBtn = getEl("#chat-send-btn", "Chat Send Button");
+    const chatLog = getEl("#chat-log", "Chat Log");
+
+    const voiceBtn = getEl("#chat-voice-btn", "Voice Button");
+    const voiceOverlay = getEl("#voice-overlay", "Voice Overlay");
+
+    const recoveryScreen = getEl("#screen-recovery", "Recovery Screen");
+    const recoveryBtn = recoveryScreen ? recoveryScreen.querySelector("[data-recovery='restart']") : null;
+
+    const permissionModal = getEl("#permission-modal", "Permission Modal");
+    const permissionAllowBtn = getEl("[data-permission='allow']", "Permission Allow");
+    const permissionDenyBtn = getEl("[data-permission='deny']", "Permission Deny");
+
+    const bootScreen = getEl("#screen-boot", "Boot Screen");
+    const bootProgress = getEl(".boot-progress", "Boot Progress");
+    const backgroundHeartbeat = getEl("#background-heartbeat", "Background Heartbeat");
+
+    if(!screens.length || !navButtons.length){
+        console.error("Essential elements missing, cannot continue.");
+        return;
+    }
 
     /* =====================
-       FUNCTIONS
+       CORE FUNCTIONS
     ==================== */
+    let currentScreen = "home";
+
     function showScreen(screenId){
         screens.forEach(screen => {
-            screen.classList.toggle("screen-active", screen.dataset.screen === screenId);
-            screen.setAttribute("aria-hidden", screen.dataset.screen !== screenId);
+            if(screen) {
+                screen.classList.toggle("screen-active", screen.dataset.screen === screenId);
+                screen.setAttribute("aria-hidden", screen.dataset.screen !== screenId);
+            }
         });
         navButtons.forEach(btn => {
-            btn.classList.toggle("active", btn.dataset.nav === screenId);
+            if(btn) btn.classList.toggle("active", btn.dataset.nav === screenId);
         });
         currentScreen = screenId;
     }
 
     function sendMessage(){
+        if(!chatInput || !chatLog) return;
         if(!chatInput.value.trim()) return;
 
-        // User message
         const userMsg = document.createElement("div");
         userMsg.className = "message user";
         userMsg.textContent = chatInput.value.trim();
@@ -50,7 +76,6 @@ function initApp() {
         chatLog.scrollTop = chatLog.scrollHeight;
         chatInput.value = "";
 
-        // EchoAI placeholder response
         const echoMsg = document.createElement("div");
         echoMsg.className = "message echo";
         echoMsg.textContent = "EchoAI will respond here...";
@@ -60,43 +85,34 @@ function initApp() {
     }
 
     /* =====================
-       INITIAL SETUP
+       EVENT LISTENERS
     ==================== */
-
-    // Bottom navigation clicks
+    // Bottom navigation
     navButtons.forEach(btn => {
-        btn.addEventListener("click", () => showScreen(btn.dataset.nav));
+        if(btn) btn.addEventListener("click", ()=>showScreen(btn.dataset.nav));
     });
 
-    // Chat input
-    chatSendBtn.addEventListener("click", sendMessage);
-    chatInput.addEventListener("keydown", e => {
-        if(e.key === "Enter") sendMessage();
-    });
+    // Chat
+    if(chatSendBtn) chatSendBtn.addEventListener("click", sendMessage);
+    if(chatInput) chatInput.addEventListener("keydown", e => { if(e.key==="Enter") sendMessage(); });
 
-    // Voice overlay toggle
-    const voiceBtn = document.getElementById("chat-voice-btn");
-    voiceBtn.addEventListener("click", () => voiceOverlay.classList.toggle("active"));
+    // Voice overlay
+    if(voiceBtn && voiceOverlay) voiceBtn.addEventListener("click", () => voiceOverlay.classList.toggle("active"));
 
-    // Permission modal buttons
-    if(permissionAllowBtn){
-        permissionAllowBtn.addEventListener("click", () => permissionModal.classList.remove("active"));
-    }
-    if(permissionDenyBtn){
-        permissionDenyBtn.addEventListener("click", () => permissionModal.classList.remove("active"));
-    }
+    // Permission modal
+    if(permissionAllowBtn && permissionModal) permissionAllowBtn.addEventListener("click", () => permissionModal.classList.remove("active"));
+    if(permissionDenyBtn && permissionModal) permissionDenyBtn.addEventListener("click", () => permissionModal.classList.remove("active"));
 
-    // Recovery screen restart
-    const recoveryBtn = recoveryScreen.querySelector("[data-recovery='restart']");
-    recoveryBtn.addEventListener("click", () => {
-        recoveryScreen.classList.remove("active");
+    // Recovery
+    if(recoveryBtn && recoveryScreen) recoveryBtn.addEventListener("click", ()=>{
+        recoveryScreen.classList.remove("screen-active");
         showScreen("home");
     });
 
-    // Android back button handling
+    // Android back button
     window.history.pushState(null, "", window.location.href);
     window.addEventListener("popstate", () => {
-        if(currentScreen !== "home"){
+        if(currentScreen !== "home") {
             showScreen("home");
             window.history.pushState(null, "", window.location.href);
         }
@@ -108,26 +124,23 @@ function initApp() {
     if(bootScreen && bootProgress){
         let progress = 0;
         bootScreen.classList.add("screen-active");
-
-        const bootInterval = setInterval(() => {
-            progress += Math.random() * 5;
-            if(progress >= 100){
-                progress = 100;
+        const bootInterval = setInterval(()=>{
+            progress += Math.random()*5;
+            if(progress>=100){
+                progress=100;
                 clearInterval(bootInterval);
                 bootScreen.classList.remove("screen-active");
                 showScreen("home");
             }
             bootProgress.style.width = `${progress}%`;
-        }, 100);
+        },100);
     }
 
     /* =====================
        BACKGROUND HEARTBEAT
     ==================== */
     if(backgroundHeartbeat){
-        setInterval(() => {
-            backgroundHeartbeat.dataset.heartbeat = Date.now();
-        }, 2000);
+        setInterval(()=>{ backgroundHeartbeat.dataset.heartbeat = Date.now(); }, 2000);
     }
 
     /* =====================
@@ -136,16 +149,17 @@ function initApp() {
     window.devEchoAI = {
         showScreen,
         sendMessage,
-        toggleVoice: () => voiceOverlay.classList.toggle("active"),
-        showRecovery: () => recoveryScreen.classList.add("active")
+        toggleVoice: () => { if(voiceOverlay) voiceOverlay.classList.toggle("active"); },
+        showRecovery: () => { if(recoveryScreen) recoveryScreen.classList.add("screen-active"); }
     };
 
     // Initial screen
     showScreen("home");
+
 }
 
 /* =====================
-   START APP
+   SAFE APP START
 ===================== */
 if(document.readyState === "loading"){
     document.addEventListener("DOMContentLoaded", initApp);
