@@ -1,0 +1,608 @@
+/* =============================================
+   RESET & GLOBAL
+============================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    background-color: #0b0f1a;
+    color: #ffffff;
+    overflow: hidden;
+}
+
+button {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+}
+
+/* =============================================
+   APP ROOT
+============================================= */
+#app-root {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* =============================================
+   SCREENS
+============================================= */
+.screen {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom) 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #0b0f1a;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.screen.screen-active {
+    display: flex;
+}
+
+/* =============================================
+   TOP STATUS BAR
+============================================= */
+#top-status-bar {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    background-color: rgba(11, 15, 26, 0.85);
+    font-size: 14px;
+    position: relative;
+    z-index: 10;
+}
+
+/* =============================================
+   HOME SCREEN CORE
+============================================= */
+#screen-home .home-core {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#echo-orb-main {
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle at center, #4f46e5, #6366f1);
+    border-radius: 50%;
+    box-shadow: 0 0 20px #6366f1;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#echo-orb-main:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px #818cf8;
+}
+
+.home-hint {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-top: 10px;
+}
+
+/* =============================================
+   QUICK ACTIONS BUTTONS
+============================================= */
+.home-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.home-actions button {
+    padding: 12px 18px;
+    border-radius: 12px;
+    background-color: #1e293b;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.home-actions button:hover {
+    background-color: #334155;
+    transform: translateY(-2px);
+}
+/* =============================================
+   EXPLORE SCREEN
+============================================= */
+#screen-explore .explore-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    padding: 20px 0;
+}
+
+.explore-card {
+    background-color: #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.explore-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px rgba(100, 116, 139, 0.4);
+}
+
+.explore-card h3 {
+    font-size: 16px;
+    color: #f1f5f9;
+}
+
+/* =============================================
+   CHAT SCREEN
+============================================= */
+#screen-chat {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 15px 10px;
+}
+
+#chat-log {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding-right: 5px;
+}
+
+#chat-log .message {
+    margin-bottom: 10px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    max-width: 75%;
+}
+
+#chat-log .message.user {
+    background-color: #4f46e5;
+    align-self: flex-end;
+}
+
+#chat-log .message.echo {
+    background-color: #1e293b;
+    align-self: flex-start;
+}
+
+.chat-input-bar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#chat-input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    background-color: #1e293b;
+    color: #ffffff;
+}
+
+#chat-send-btn,
+#chat-voice-btn {
+    padding: 12px 16px;
+    border-radius: 12px;
+    background-color: #4f46e5;
+    transition: background-color 0.2s ease;
+}
+
+#chat-send-btn:hover,
+#chat-voice-btn:hover {
+    background-color: #6366f1;
+}
+
+/* =============================================
+   PROFILE SCREEN
+============================================= */
+#screen-profile .profile-core {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    background-color: #334155;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 0;
+}
+
+.profile-actions button {
+    background-color: #1e293b;
+    border-radius: 12px;
+    padding: 12px;
+    transition: background-color 0.2s ease;
+}
+
+.profile-actions button:hover {
+    background-color: #334155;
+}
+
+/* =============================================
+   SETTINGS SCREEN
+============================================= */
+#screen-settings .settings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px 10px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: #1e293b;
+    border-radius: 12px;
+    transition: background-color 0.2s ease;
+}
+
+.setting-item button {
+    width: 40px;
+    height: 24px;
+    background-color: #4f46e5;
+    border-radius: 12px;
+    transition: background-color 0.2s ease;
+}
+
+.setting-item:hover {
+    background-color: #334155;
+}
+
+/* =============================================
+   OVERLAYS & MODALS
+============================================= */
+#voice-overlay,
+#permission-modal,
+#toast-container,
+#system-banner,
+#screen-recovery {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+#voice-overlay.active,
+#permission-modal.active,
+#toast-container.active,
+#system-banner.active,
+#screen-recovery.active {
+    display: flex;
+}
+
+#voice-overlay .voice-orb {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle at center, #4f46e5, #6366f1);
+    border-radius: 50%;
+    box-shadow: 0 0 25px #6366f1;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 25px #6366f1; }
+    50% { transform: scale(1.1); box-shadow: 0 0 40px #818cf8; }
+    100% { transform: scale(1); box-shadow: 0 0 25px #6366f1; }
+}
+/* =============================================
+   BOTTOM NAVIGATION
+============================================= */
+#bottom-navigation {
+    position: fixed;
+    bottom: env(safe-area-inset-bottom, 0);
+    left: 0;
+    width: 100%;
+    height: 65px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgba(11, 15, 26, 0.95);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.5);
+    z-index: 20;
+}
+
+#bottom-navigation button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    color: #cbd5e1;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+#bottom-navigation button:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+#bottom-navigation button.active {
+    color: #6366f1;
+}
+
+/* =============================================
+   BOOT SCREEN
+============================================= */
+#screen-boot {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    background-color: #0b0f1a;
+    z-index: 50;
+}
+
+#boot-orb {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle at center, #4f46e5, #6366f1);
+    border-radius: 50%;
+    box-shadow: 0 0 30px #6366f1;
+    animation: boot-spin 2s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes boot-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#boot-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#boot-tagline {
+    font-size: 16px;
+    color: #cbd5e1;
+    margin-bottom: 20px;
+}
+
+#boot-loader {
+    width: 80%;
+    height: 6px;
+    background-color: #1e293b;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.boot-progress {
+    width: 0%;
+    height: 100%;
+    background-color: #6366f1;
+    border-radius: 12px;
+    animation: load-progress 3s linear infinite;
+}
+
+@keyframes load-progress {
+    0% { width: 0%; }
+    50% { width: 100%; }
+    100% { width: 0%; }
+}
+
+/* =============================================
+   SAFE AREA SUPPORT
+============================================= */
+#safe-area-top,
+#safe-area-bottom {
+    height: env(safe-area-inset-top, 0);
+    width: 100%;
+    background-color: #0b0f1a;
+}
+
+#safe-area-bottom {
+    height: env(safe-area-inset-bottom, 0);
+}
+
+/* =============================================
+   RECOVERY SCREEN
+============================================= */
+#screen-recovery .recovery-wrapper {
+    background-color: #1e293b;
+    padding: 30px 20px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+#screen-recovery button {
+    margin-top: 20px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    background-color: #4f46e5;
+    color: #ffffff;
+    transition: background-color 0.2s ease;
+}
+
+#screen-recovery button:hover {
+    background-color: #6366f1;
+}
+
+/* =============================================
+   OVERLAY POLISH
+============================================= */
+#permission-modal .modal-content,
+#toast-container,
+#system-banner {
+    background-color: #1e293b;
+    border-radius: 12px;
+    padding: 15px 20px;
+    color: #ffffff;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+#toast-container {
+    bottom: 90px;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* =============================================
+   RESPONSIVE / MOBILE POLISH
+============================================= */
+@media (max-width: 400px) {
+    #echo-orb-main {
+        width: 90px;
+        height: 90px;
+    }
+
+    .home-actions button {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    #boot-title {
+        font-size: 24px;
+    }
+
+    #boot-tagline {
+        font-size: 14px;
+    }
+}
+/* =============================================
+   VOICE OVERLAY FINISHING TOUCHES
+============================================= */
+#voice-overlay {
+    background-color: rgba(11, 15, 26, 0.85);
+    flex-direction: column;
+    gap: 15px;
+}
+
+#voice-overlay p.voice-status {
+    font-size: 16px;
+    color: #cbd5e1;
+    text-shadow: 0 0 8px #818cf8;
+}
+
+/* =============================================
+   ORB GLOW & PULSE (HOME + VOICE)
+============================================= */
+#echo-orb-main,
+#voice-overlay .voice-orb {
+    box-shadow: 0 0 25px #6366f1, 0 0 50px #4f46e5;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#echo-orb-main.active,
+#voice-overlay .voice-orb.active {
+    animation: orb-pulse 1.5s infinite;
+}
+
+@keyframes orb-pulse {
+    0% { transform: scale(1); box-shadow: 0 0 25px #6366f1, 0 0 50px #4f46e5; }
+    50% { transform: scale(1.1); box-shadow: 0 0 40px #818cf8, 0 0 60px #a5b4fc; }
+    100% { transform: scale(1); box-shadow: 0 0 25px #6366f1, 0 0 50px #4f46e5; }
+}
+
+/* =============================================
+   BUTTON HOVER & TAP DEPTH
+============================================= */
+button {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(100,116,139,0.5);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(100,116,139,0.4);
+}
+
+/* =============================================
+   SCREEN TRANSITIONS
+============================================= */
+.screen {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.screen.screen-active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =============================================
+   SUBTLE SHADOWS & DEPTH
+============================================= */
+.explore-card,
+.profile-actions button,
+.setting-item,
+#chat-send-btn,
+#chat-voice-btn {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* =============================================
+   MOBILE TOUCH POLISH
+============================================= */
+@media (hover: none) {
+    button:hover {
+        transform: none;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+}
+
+@media (max-width: 360px) {
+    #bottom-navigation {
+        height: 60px;
+    }
+
+    #bottom-navigation button {
+        font-size: 11px;
+    }
+
+    .home-actions {
+        gap: 10px;
+    }
+}
