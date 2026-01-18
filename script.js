@@ -1,6 +1,6 @@
 /* =============================================
    ECHOAI ULTRA-SAFE SCRIPT.JS
-   Joshua Bwalya — GitHub Pages ready
+   Joshua Bwalya — Smooth Transitions + Blue Theme
 ============================================= */
 
 function initApp() {
@@ -13,7 +13,6 @@ function initApp() {
         if(!el) console.error(`Missing element: ${desc} (${selector})`);
         return el;
     };
-
     const getAll = (selector, desc) => {
         const els = document.querySelectorAll(selector);
         if(!els.length) console.error(`Missing elements: ${desc} (${selector})`);
@@ -39,12 +38,6 @@ function initApp() {
 
     const bootScreen = getEl("#screen-boot", "Boot Screen");
     const bootProgress = getEl(".boot-progress", "Boot Progress");
-    const backgroundHeartbeat = getEl("#background-heartbeat", "Background Heartbeat");
-
-    if(!screens.length || !navButtons.length){
-        console.error("Essential elements missing, cannot continue.");
-        return;
-    }
 
     /* =====================
        CORE FUNCTIONS
@@ -53,9 +46,16 @@ function initApp() {
 
     function showScreen(screenId){
         screens.forEach(screen => {
-            if(screen) {
-                screen.classList.toggle("screen-active", screen.dataset.screen === screenId);
-                screen.setAttribute("aria-hidden", screen.dataset.screen !== screenId);
+            if(!screen) return;
+            if(screen.dataset.screen === screenId){
+                screen.classList.add("screen-active");
+                screen.style.opacity = 0;
+                setTimeout(()=> screen.style.opacity = 1, 50); // fade in
+                screen.setAttribute("aria-hidden", "false");
+            } else {
+                screen.style.opacity = 0;
+                setTimeout(()=> screen.classList.remove("screen-active"), 200); // fade out
+                screen.setAttribute("aria-hidden", "true");
             }
         });
         navButtons.forEach(btn => {
@@ -64,52 +64,66 @@ function initApp() {
         currentScreen = screenId;
     }
 
-    function sendMessage(){
+    function sendMessage([userMsg, echoMsg].forEach(msg => {
+    msg.style.opacity = 0;
+    msg.style.transform = "translateX(20px)";
+    setTimeout(()=>{
+        msg.style.opacity = 1;
+        msg.style.transform = "translateX(0)";
+        msg.style.transition = "all 0.25s ease";
+    }, 50);
+});){
         if(!chatInput || !chatLog) return;
         if(!chatInput.value.trim()) return;
 
+        // User message
         const userMsg = document.createElement("div");
         userMsg.className = "message user";
         userMsg.textContent = chatInput.value.trim();
         chatLog.appendChild(userMsg);
-
         chatLog.scrollTop = chatLog.scrollHeight;
         chatInput.value = "";
 
+        // Echo “typing” animation
         const echoMsg = document.createElement("div");
         echoMsg.className = "message echo";
-        echoMsg.textContent = "EchoAI will respond here...";
+        echoMsg.textContent = "EchoAI is typing…";
         chatLog.appendChild(echoMsg);
-
         chatLog.scrollTop = chatLog.scrollHeight;
+
+        setTimeout(()=>{
+            echoMsg.textContent = "EchoAI will respond here...";
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }, 800); // simulate typing
     }
 
     /* =====================
        EVENT LISTENERS
     ==================== */
-    // Bottom navigation
     navButtons.forEach(btn => {
         if(btn) btn.addEventListener("click", ()=>showScreen(btn.dataset.nav));
     });
 
-    // Chat
     if(chatSendBtn) chatSendBtn.addEventListener("click", sendMessage);
     if(chatInput) chatInput.addEventListener("keydown", e => { if(e.key==="Enter") sendMessage(); });
 
-    // Voice overlay
-    if(voiceBtn && voiceOverlay) voiceBtn.addEventListener("click", () => voiceOverlay.classList.toggle("active"));
+    if(voiceBtn && voiceOverlay){
+        voiceBtn.addEventListener("click", ()=>{
+            voiceOverlay.classList.toggle("active");
+            voiceOverlay.style.transition = "opacity 0.4s";
+        });
+    }
 
-    // Permission modal
-    if(permissionAllowBtn && permissionModal) permissionAllowBtn.addEventListener("click", () => permissionModal.classList.remove("active"));
-    if(permissionDenyBtn && permissionModal) permissionDenyBtn.addEventListener("click", () => permissionModal.classList.remove("active"));
+    if(permissionAllowBtn && permissionModal) permissionAllowBtn.addEventListener("click", ()=>permissionModal.classList.remove("active"));
+    if(permissionDenyBtn && permissionModal) permissionDenyBtn.addEventListener("click", ()=>permissionModal.classList.remove("active"));
 
-    // Recovery
-    if(recoveryBtn && recoveryScreen) recoveryBtn.addEventListener("click", ()=>{
-        recoveryScreen.classList.remove("screen-active");
-        showScreen("home");
-    });
+    if(recoveryBtn && recoveryScreen){
+        recoveryBtn.addEventListener("click", ()=>{
+            recoveryScreen.classList.remove("screen-active");
+            showScreen("home");
+        });
+    }
 
-    // Android back button
     window.history.pushState(null, "", window.location.href);
     window.addEventListener("popstate", () => {
         if(currentScreen !== "home") {
@@ -133,14 +147,7 @@ function initApp() {
                 showScreen("home");
             }
             bootProgress.style.width = `${progress}%`;
-        },100);
-    }
-
-    /* =====================
-       BACKGROUND HEARTBEAT
-    ==================== */
-    if(backgroundHeartbeat){
-        setInterval(()=>{ backgroundHeartbeat.dataset.heartbeat = Date.now(); }, 2000);
+        },80); // slightly faster smooth loading
     }
 
     /* =====================
@@ -155,7 +162,6 @@ function initApp() {
 
     // Initial screen
     showScreen("home");
-
 }
 
 /* =====================
