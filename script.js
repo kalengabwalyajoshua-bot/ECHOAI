@@ -1,7 +1,6 @@
 /* =============================
-   EchoAI Script.js
-   Fully Functional
-   Structured as 10 Chunks internally
+   EchoAI Script.js - Real Stories & Songs
+   Fully Functional, 10 Chunks
 ============================= */
 
 /* -------- Chunk 1: Element References -------- */
@@ -15,20 +14,39 @@ const controlFeature = document.getElementById('controlFeature');
 const backgroundMusic = document.getElementById('backgroundMusic');
 const storyAudio = document.getElementById('storyAudio');
 
-/* -------- Chunk 2: Responses & Data -------- */
+/* -------- Chunk 2: Real Stories & Songs -------- */
 const responses = {
     greetings: ["Hello! How’s your day?", "Hey there! Ready to explore?", "Hi! I’m EchoAI."],
     farewell: ["Goodbye! Talk soon.", "See you later! Stay awesome.", "Catch you later!"],
+
+    // Real story audios (public domain / creative commons)
     stories: [
-        {title:"Calm Forest", audio:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", text:"Imagine walking through a calm forest..."},
-        {title:"Stormy Adventure", audio:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", text:"Thunder rumbles as you step into stormy mountains..."},
-        {title:"Ocean Escape", audio:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", text:"Waves crash gently as you drift into the endless ocean..."}
+        { 
+            title:"The Tortoise and the Hare (Aesop)", 
+            audio:"https://www.storynory.com/wp-content/uploads/2015/05/tortoise-and-hare.mp3", 
+            text:"A classic fable about slow and steady winning the race..."
+        },
+        { 
+            title:"Cinderella (Short Version)", 
+            audio:"https://www.storynory.com/wp-content/uploads/2013/12/cinderella-short.mp3", 
+            text:"A short version of the beloved fairy tale about kindness and magic..."
+        },
+        { 
+            title:"Little Red Riding Hood", 
+            audio:"https://www.storynory.com/wp-content/uploads/2013/06/little-red-riding-hood.mp3", 
+            text:"A story about a young girl, a wolf, and courage..."
+        }
     ],
+
+    // Real lyrical songs (Creative Commons / royalty-free)
     music: [
-        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
-        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3"
+        "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Lee_Rosevere/Through_the_Fog/Lee_Rosevere_-_03_-_Like_Someone_in_Love.mp3",
+        "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Mr_Smith/Melodic_Journey/Mr_Smith_-_01_-_Melodic_Journey.mp3",
+        "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Scott_Holmes/Acoustic/Scott_Holmes_-_04_-_Life_Is.mp3"
     ],
+
     unknown: ["Hmm, I’m not sure. Can you rephrase?", "Interesting... I need to think more!", "Sorry, I don't know that yet."],
+
     phoneControl: {call:"Simulating a call...", sms:"Pretending to send a message...", toggleData:"Toggling mobile data..."}
 };
 
@@ -111,7 +129,7 @@ if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
     recognition.onstart = () => { addMessage("🎤 Listening...", 'system'); }
     recognition.onresult = (e) => { const t = e.results[0][0].transcript; addMessage(t, 'user'); processInput(t); }
-    recognition.onerror = () => { addMessage("Voice recognition error. Try again.", 'system'); }
+    recognition.onerror = () => { addMessage("Voice recognition error. Try again.",'system'); }
 
     voiceBtn.addEventListener('click', () => { if(recognition) recognition.start(); });
 } else {
