@@ -1,199 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EchoAI - AI Companion</title>
-    <link rel="icon" href="https://img.icons8.com/color/48/000000/ai.png">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        /* ========= Reset & Base ========= */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
-        html, body { width: 100%; height: 100%; background: #0f0f1a; color: #fff; overflow-x: hidden; }
-        .app-container { display: flex; flex-direction: column; justify-content: space-between; max-width: 1000px; margin: 0 auto; height: 100vh; padding: 20px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EchoAI – Futuristic Empathy Engine</title>
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
+<style>
+  /* ====== Futuristic Design Styles ====== */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Orbitron', sans-serif;
+    background: radial-gradient(circle at 30% 30%, #0c0c1e, #1a1a2e, #0f0c29);
+    color: #e0e0ff;
+    overflow: hidden;
+  }
 
-        /* ========= Header ========= */
-        .app-header { text-align: center; margin-bottom: 20px; }
-        .app-header .logo { width: 60px; height: 60px; margin-bottom: 10px; }
-        .app-header h1 { font-size: 2.5rem; color: #fff; }
-        .app-header p { font-size: 1rem; color: #aaa; margin-top: 5px; }
+  /* --- Glowing Home Screen --- */
+  #home-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    animation: screenFadeIn 1.5s ease-in-out;
+  }
 
-        /* ========= Chat Window ========= */
-        .chat-window { flex: 1; overflow-y: auto; padding: 15px; border-radius: 10px; background: #1a1a40; margin-bottom: 15px; }
-        .message { padding: 10px 15px; border-radius: 10px; margin-bottom: 10px; max-width: 80%; word-wrap: break-word; }
-        .message.user { background: #4b4bff; color: #fff; align-self: flex-end; }
-        .message.system { background: #2a2a60; color: #fff; align-self: flex-start; }
+  .app-icon-glow {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #6a0dad 0%, #2e0d4f 70%);
+    box-shadow: 0 0 30px #8a2be2, 0 0 60px #6a0dad;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.4s ease-in-out;
+  }
 
-        /* ========= Input Area ========= */
-        .input-area { display: flex; gap: 10px; }
-        .input-area input { flex: 1; padding: 10px 15px; border-radius: 10px; border: none; outline: none; background: #2a2a60; color: #fff; }
-        .send-btn, .voice-btn { padding: 10px 15px; border-radius: 10px; border: none; cursor: pointer; font-weight: 500; }
-        .send-btn { background: #4b4bff; color: #fff; transition: transform 0.2s; }
-        .send-btn:hover { transform: scale(1.05); }
-        .voice-btn { background: #ff4b4b; color: #fff; display: flex; align-items: center; gap: 5px; animation: glowPulse 2s infinite; }
-        @keyframes glowPulse { 0%,100% { box-shadow: 0 0 10px #ff4b4b; } 50% { box-shadow: 0 0 25px #ff4b4b; } }
+  .app-icon-glow:hover {
+    transform: scale(1.15) rotate(10deg);
+  }
 
-        /* ========= Footer / Features ========= */
-        .app-footer { margin-top: 15px; text-align: center; }
-        .feature-icons { display: flex; justify-content: space-around; margin-bottom: 10px; }
-        .feature { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s; }
-        .feature:hover { transform: scale(1.1); }
-        .feature img { width: 40px; height: 40px; margin-bottom: 5px; }
-        .version { font-size: 0.8rem; color: #aaa; }
+  .app-icon {
+    width: 70%;
+    height: 70%;
+  }
 
-        /* ========= Background Glow ========= */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0;
-            width: 150%; height: 150%;
-            background: radial-gradient(circle at 30% 30%, #1a1a40, #0f0f1a 50%);
-            filter: blur(100px);
-            z-index: -1;
-        }
-    </style>
+  h1 {
+    font-size: 3rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px #8a2be2, 0 0 40px #6a0dad;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #6a0dad;
+  }
+
+  .voice-button {
+    font-size: 1.3rem;
+    padding: 15px 30px;
+    border-radius: 25px;
+    background: linear-gradient(45deg, #6a0dad, #8a2be2);
+    box-shadow: 0 0 20px #6a0dad, 0 0 40px #8a2be2;
+    transition: 0.4s;
+  }
+
+  .voice-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px #8a2be2, 0 0 60px #6a0dad;
+  }
+
+  #response-container {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 15px;
+    background: rgba(20, 10, 40, 0.6);
+    box-shadow: 0 0 20px #8a2be2 inset;
+    min-width: 300px;
+    max-width: 600px;
+    text-align: center;
+    font-size: 1.1rem;
+  }
+
+  /* --- Stories Section --- */
+  .hidden-screen {
+    display: none;
+  }
+
+  #story-music-screen {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(20, 10, 40, 0.7);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px #6a0dad, 0 0 60px #8a2be2 inset;
+    width: 90%;
+    max-width: 800px;
+    text-align: center;
+  }
+
+  #story-container {
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 15px;
+    background: rgba(10, 5, 30, 0.6);
+    min-height: 120px;
+    font-size: 1.2rem;
+  }
+
+  .story-btn {
+    background: linear-gradient(45deg, #00ffff, #0ff);
+    box-shadow: 0 0 20px #0ff, 0 0 40px #00ffff;
+    color: #000;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .story-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px #00ffff, 0 0 60px #0ff;
+  }
+
+  /* --- Control Panel --- */
+  #control-panel {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 10, 35, 0.8);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px #8a2be2;
+    text-align: center;
+  }
+
+  .control-buttons button {
+    margin: 8px;
+  }
+
+  /* --- Voice Status --- */
+  .status-glow {
+    position: fixed;
+    top: 5%;
+    right: 5%;
+    padding: 10px 20px;
+    border-radius: 20px;
+    background: rgba(20, 10, 40, 0.8);
+    box-shadow: 0 0 20px #6a0dad, 0 0 40px #8a2be2 inset;
+    font-weight: bold;
+  }
+
+  /* --- Canvas Glowing Effects --- */
+  #glow-effects-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  /* --- Animations --- */
+  @keyframes screenFadeIn {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+</style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <img src="https://img.icons8.com/color/48/000000/ai.png" alt="EchoAI Logo" class="logo">
-            <h1>EchoAI</h1>
-            <p>Your Empathy-Powered AI Companion</p>
-        </header>
-
-        <!-- Main Chat Window -->
-        <main class="interaction-area">
-            <div id="chatWindow" class="chat-window">
-                <div class="message system">Hello! I’m EchoAI. How can I help you today?</div>
-            </div>
-
-            <!-- Input Area -->
-            <div class="input-area">
-                <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off">
-                <button id="sendBtn" class="send-btn">Send</button>
-                <button id="voiceBtn" class="voice-btn">
-                    <img src="https://img.icons8.com/ios-filled/24/ffffff/microphone.png" alt="Mic Icon"> Speak
-                </button>
-            </div>
-        </main>
-
-        <!-- Feature Section -->
-        <footer class="app-footer">
-            <div class="feature-icons">
-                <div id="storyFeature" class="feature">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/book.png" alt="Story Icon">
-                    <p>Stories</p>
-                </div>
-                <div id="musicFeature" class="feature">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/musical-notes.png" alt="Music Icon">
-                    <p>Music</p>
-                </div>
-                <div id="controlFeature" class="feature">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/phone.png" alt="Control Icon">
-                    <p>Phone Control</p>
-                </div>
-            </div>
-            <p class="version">EchoAI v1.0.0 &copy; 2026</p>
-        </footer>
-
-        <!-- Hidden Audio Elements -->
-        <audio id="backgroundMusic" loop></audio>
-        <audio id="storyAudio"></audio>
+  <!-- Glowing Home Screen -->
+  <div id="home-screen" class="glow-container">
+    <div class="app-icon-glow">
+      <img src="echo_icon.png" alt="EchoAI" class="app-icon">
     </div>
+    <h1>EchoAI</h1>
+    <p>Your Futuristic Empathy Engine</p>
+    <button id="voice-btn" class="voice-button">🎤 Talk to EchoAI</button>
+    <div id="response-container" class="response-glow"></div>
+  </div>
 
-    <!-- Script -->
-    <script>
-        // =========================
-        // EchoAI Full JS
-        // =========================
+  <!-- Stories & Music Section -->
+  <div id="story-music-screen" class="hidden-screen">
+    <h2>Bedtime Stories & Music</h2>
+    <div id="story-container">
+      <p id="story-text">Press "Start Story" to begin your adventure.</p>
+    </div>
+    <button id="start-story" class="story-btn">Start Story</button>
+    <button id="stop-story" class="story-btn">Stop Story</button>
+    <audio id="story-music" loop></audio>
+    <div id="sound-effects-container"></div>
+  </div>
 
-        const chatWindow = document.getElementById('chatWindow');
-        const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const voiceBtn = document.getElementById('voiceBtn');
-        const storyFeature = document.getElementById('storyFeature');
-        const musicFeature = document.getElementById('musicFeature');
-        const controlFeature = document.getElementById('controlFeature');
-        const backgroundMusic = document.getElementById('backgroundMusic');
-        const storyAudio = document.getElementById('storyAudio');
+  <!-- Control & Settings Panel -->
+  <div id="control-panel" class="hidden-screen">
+    <h2>Phone & App Controls</h2>
+    <div class="control-buttons">
+      <button onclick="sendWhatsAppMessage()">Send WhatsApp Message</button>
+      <button onclick="toggleData()">Toggle Data</button>
+      <button onclick="makeCall()">Call Me</button>
+      <button onclick="stopAll()">Stop Everything</button>
+    </div>
+  </div>
 
-        const responses = {
-            greetings: ["Hello! How’s your day?", "Hey there! Ready to explore?", "Hi! I’m EchoAI."],
-            farewell: ["Goodbye! Talk soon.", "See you later! Stay awesome.", "Catch you later!"],
-            stories: [
-                {title:"Calm Forest", audio:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", text:"Imagine walking through a calm forest..."},
-                {title:"Stormy Adventure", audio:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", text:"Thunder rumbles as you step into stormy mountains..."},
-                {title:"Ocean Escape", audio:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", text:"Waves crash gently as you drift into the endless ocean..."}
-            ],
-            music: [
-                "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
-                "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3"
-            ],
-            unknown: ["Hmm, I’m not sure. Can you rephrase?", "Interesting... I need to think more!", "Sorry, I don't know that yet."],
-            phoneControl: {call:"Simulating a call...", sms:"Pretending to send a message...", toggleData:"Toggling mobile data..."}
-        };
+  <!-- Hidden Background Audio -->
+  <div id="background-audio-container" class="hidden-screen">
+    <audio id="ambient-music" loop></audio>
+  </div>
 
-        function addMessage(content,sender='system'){
-            const msg=document.createElement('div');
-            msg.classList.add('message',sender);
-            msg.textContent=content;
-            chatWindow.appendChild(msg);
-            chatWindow.scrollTop=chatWindow.scrollHeight;
-        }
+  <!-- Voice Recognition Status -->
+  <div id="voice-status" class="status-glow hidden-screen">
+    Listening...
+  </div>
 
-        function randomChoice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-
-        function processInput(text){
-            text=text.toLowerCase();
-            if(text.includes("hello")||text.includes("hi")) addMessage(randomChoice(responses.greetings));
-            else if(text.includes("bye")||text.includes("goodbye")) addMessage(randomChoice(responses.farewell));
-            else if(text.includes("story")) tellRandomStory();
-            else if(text.includes("music")) playRandomMusic();
-            else if(text.includes("call")||text.includes("message")||text.includes("data")) controlPhone(text);
-            else addMessage(randomChoice(responses.unknown));
-        }
-
-        function tellRandomStory(){
-            const story=randomChoice(responses.stories);
-            addMessage(`🎬 ${story.title}: ${story.text}`);
-            storyAudio.src=story.audio; storyAudio.play();
-        }
-
-        function playRandomMusic(){
-            const music=randomChoice(responses.music);
-            backgroundMusic.src=music; backgroundMusic.play();
-            addMessage("🎵 Playing music for you...");
-        }
-
-        function controlPhone(cmd){
-            let resp="";
-            if(cmd.includes("call")) resp=responses.phoneControl.call;
-            else if(cmd.includes("message")) resp=responses.phoneControl.sms;
-            else if(cmd.includes("data")) resp=responses.phoneControl.toggleData;
-            else resp="Cannot control this feature yet.";
-            addMessage(`📱 ${resp}`);
-        }
-
-        sendBtn.addEventListener('click',()=>{const t=userInput.value.trim();if(t==="")return;addMessage(t,'user');userInput.value='';processInput(t);});
-        userInput.addEventListener('keypress',(e)=>{if(e.key==='Enter') sendBtn.click();});
-        
-        storyFeature.addEventListener('click',tellRandomStory);
-        musicFeature.addEventListener('click',playRandomMusic);
-        controlFeature.addEventListener('click',()=>{addMessage("📱 Phone control clicked. Use commands.");});
-
-        // ===== Voice Recognition =====
-        let recognition;
-        if('webkitSpeechRecognition' in window||'SpeechRecognition' in window){
-            const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-            recognition=new SpeechRecognition(); recognition.continuous=false; recognition.lang='en-US'; recognition.interimResults=false;
-            recognition.onstart=()=>{addMessage("🎤 Listening...",'system');}
-            recognition.onresult=(e)=>{const t=e.results[0][0].transcript; addMessage(t,'user'); processInput(t);}
-            recognition.onerror=()=>{addMessage("Voice recognition error. Try again.",'system');}
-            voiceBtn.addEventListener('click',()=>{if(recognition) recognition.start();});
-        } else { voiceBtn.disabled=true; voiceBtn.textContent="Voice not supported"; }
-
-        window.addEventListener('load',()=>{setTimeout(()=>{addMessage("✨ EchoAI is online! Speak or type to start...");},500);});
-    </script>
+  <!-- Dynamic Visual Effects -->
+  <canvas id="glow-effects-canvas"></canvas>
 </body>
 </html>
