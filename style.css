@@ -1,353 +1,194 @@
 /* =============================
-   EchoAI Style Sheet - style.css
-   Fully Responsive & Futuristic
+   EchoAI Style.css
+   Fully Compatible with index.html
+   Structured as 10 internal "chunks"
 ============================= */
 
-/* Basic Reset */
+/* -------- Chunk 1: Reset & Base -------- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
 }
-
 html, body {
-    height: 100%;
     width: 100%;
+    height: 100%;
     background: #0f0f1a;
     color: #fff;
     overflow-x: hidden;
 }
-
-/* ----------------------------
-   Glowing Background
----------------------------- */
-.glow-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 20% 30%, #1a1aff, #0f0f1a 40%),
-                radial-gradient(circle at 80% 70%, #ff1aff, #0f0f1a 40%);
-    animation: moveGlow 20s infinite alternate;
-    z-index: -1;
-    filter: blur(120px);
-}
-
-@keyframes moveGlow {
-    0% { transform: translate(0,0) scale(1); }
-    25% { transform: translate(-50px, 100px) scale(1.1); }
-    50% { transform: translate(100px, -50px) scale(1.2); }
-    75% { transform: translate(-150px, 50px) scale(1.1); }
-    100% { transform: translate(0,0) scale(1); }
-}
-
-/* ----------------------------
-   App Container
----------------------------- */
 .app-container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     max-width: 1000px;
-    margin: auto;
+    margin: 0 auto;
     height: 100vh;
     padding: 20px;
-    position: relative;
 }
 
-/* ----------------------------
-   Header
----------------------------- */
+/* -------- Chunk 2: Header -------- */
 .app-header {
     text-align: center;
     margin-bottom: 20px;
 }
-
-.logo-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-}
-
-.logo-container img.logo {
+.app-header .logo {
     width: 60px;
     height: 60px;
-    animation: rotateLogo 10s linear infinite;
+    margin-bottom: 10px;
 }
-
-@keyframes rotateLogo {
-    0% { transform: rotate(0deg); }
-    50% { transform: rotate(180deg); }
-    100% { transform: rotate(360deg); }
-}
-
 .app-header h1 {
     font-size: 2.5rem;
-    color: #ffffff;
-    text-shadow: 0 0 10px #ff1aff, 0 0 20px #1a1aff;
+    color: #fff;
 }
-
-.app-header .tagline {
+.app-header p {
     font-size: 1rem;
     color: #aaa;
     margin-top: 5px;
 }
 
-/* ----------------------------
-   Chat Window
----------------------------- */
-.interaction-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 15px;
-}
-
+/* -------- Chunk 3: Chat Window -------- */
 .chat-window {
     flex: 1;
-    background: rgba(15, 15, 26, 0.6);
-    border-radius: 15px;
-    padding: 20px;
     overflow-y: auto;
-    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: 10px;
+    background: #1a1a40;
+    margin-bottom: 15px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    animation: fadeIn 1s ease-in;
 }
-
-.chat-window::-webkit-scrollbar {
-    width: 8px;
-}
-
-.chat-window::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #ff1aff, #1a1aff);
-    border-radius: 10px;
-}
-
 .message {
-    max-width: 80%;
     padding: 10px 15px;
-    border-radius: 20px;
-    animation: messageAppear 0.5s ease-in;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
 }
-
 .message.user {
+    background: #4b4bff;
+    color: #fff;
     align-self: flex-end;
-    background: linear-gradient(135deg, #ff1aff, #ff61ff);
-    color: #fff;
 }
-
 .message.system {
-    align-self: flex-start;
-    background: linear-gradient(135deg, #1a1aff, #61ffff);
+    background: #2a2a60;
     color: #fff;
+    align-self: flex-start;
 }
 
-@keyframes messageAppear {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
-/* ----------------------------
-   Text Input & Voice Controls
----------------------------- */
-.text-input-area {
+/* -------- Chunk 4: Input Area -------- */
+.input-area {
     display: flex;
     gap: 10px;
-    margin-top: 10px;
 }
-
-.text-input-area input {
+.input-area input {
     flex: 1;
-    padding: 15px 20px;
-    border-radius: 25px;
+    padding: 10px 15px;
+    border-radius: 10px;
     border: none;
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
     outline: none;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
-
-.text-input-area input:focus {
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 15px #ff1aff, 0 0 20px #1a1aff;
-}
-
-.send-btn {
-    background: linear-gradient(135deg, #ff1aff, #1a1aff);
-    border: none;
-    padding: 15px 25px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: bold;
+    background: #2a2a60;
     color: #fff;
-    transition: all 0.3s ease;
 }
-
+.send-btn, .voice-btn {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+.send-btn {
+    background: #4b4bff;
+    color: #fff;
+    transition: transform 0.2s;
+}
 .send-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 15px #ff1aff, 0 0 25px #1a1aff;
+    transform: scale(1.05);
 }
-
-.voice-control {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-}
-
 .voice-btn {
+    background: #ff4b4b;
+    color: #fff;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 20px;
-    border-radius: 50px;
-    border: none;
-    background: linear-gradient(135deg, #1a1aff, #ff1aff);
-    color: #fff;
-    cursor: pointer;
-    font-weight: bold;
-    animation: pulseGlow 2s infinite;
-    transition: transform 0.3s ease;
+    gap: 5px;
+    animation: glowPulse 2s infinite;
+}
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 10px #ff4b4b; }
+    50% { box-shadow: 0 0 25px #ff4b4b; }
 }
 
-.voice-btn:hover {
-    transform: scale(1.1);
-}
-
-@keyframes pulseGlow {
-    0% { box-shadow: 0 0 10px #ff1aff, 0 0 20px #1a1aff; }
-    50% { box-shadow: 0 0 25px #ff1aff, 0 0 40px #1a1aff; }
-    100% { box-shadow: 0 0 10px #ff1aff, 0 0 20px #1a1aff; }
-}
-
-/* ----------------------------
-   Footer & Features
----------------------------- */
+/* -------- Chunk 5: Footer / Features -------- */
 .app-footer {
+    margin-top: 15px;
     text-align: center;
-    margin-top: 20px;
 }
-
 .feature-icons {
     display: flex;
-    justify-content: center;
-    gap: 30px;
+    justify-content: space-around;
     margin-bottom: 10px;
 }
-
 .feature {
     display: flex;
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: transform 0.2s;
 }
-
+.feature:hover {
+    transform: scale(1.1);
+}
 .feature img {
-    width: 50px;
-    height: 50px;
-    filter: drop-shadow(0 0 10px #ff1aff);
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
 }
-
-.feature:hover img {
-    transform: scale(1.2) rotate(10deg);
-}
-
-.feature p {
-    margin-top: 5px;
-    font-size: 0.9rem;
+.version {
+    font-size: 0.8rem;
     color: #aaa;
-    transition: color 0.3s ease;
 }
 
-.feature:hover p {
-    color: #fff;
-}
-
-.version-info {
-    font-size: 0.75rem;
-    color: #666;
-}
-
-/* ----------------------------
-   Glowing Floating Bubble
----------------------------- */
-.glow-bubble {
+/* -------- Chunk 6: Background Glow -------- */
+body::before {
+    content: '';
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background: linear-gradient(45deg, #ff1aff, #1a1aff);
-    box-shadow: 0 0 20px #ff1aff, 0 0 30px #1a1aff;
-    cursor: pointer;
-    animation: floatBubble 3s infinite alternate;
-    z-index: 100;
+    top: 0; left: 0;
+    width: 150%; height: 150%;
+    background: radial-gradient(circle at 30% 30%, #1a1a40, #0f0f1a 50%);
+    filter: blur(100px);
+    z-index: -1;
 }
 
-@keyframes floatBubble {
-    0% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-20px) scale(1.1); }
-    100% { transform: translateY(0) scale(1); }
+/* -------- Chunk 7: Scrollbar Styling -------- */
+.chat-window::-webkit-scrollbar {
+    width: 10px;
+}
+.chat-window::-webkit-scrollbar-track {
+    background: #0f0f1a;
+}
+.chat-window::-webkit-scrollbar-thumb {
+    background: #4b4bff;
+    border-radius: 10px;
+}
+.chat-window::-webkit-scrollbar-thumb:hover {
+    background: #6b6bff;
 }
 
-/* ----------------------------
-   Animations
----------------------------- */
-@keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-}
-
-/* ----------------------------
-   Responsive Design
----------------------------- */
+/* -------- Chunk 8: Responsive Design -------- */
 @media screen and (max-width: 768px) {
-    .chat-window {
-        padding: 15px;
-    }
-
-    .text-input-area input {
-        padding: 12px 15px;
-    }
-
-    .voice-btn {
-        padding: 10px 15px;
-    }
-
-    .feature img {
-        width: 40px;
-        height: 40px;
-    }
+    .app-container { padding: 15px; }
+    .app-header h1 { font-size: 2rem; }
+    .feature img { width: 35px; height: 35px; }
+    .input-area input { padding: 8px 10px; }
+    .send-btn, .voice-btn { padding: 8px 10px; font-size: 0.9rem; }
 }
 
-@media screen and (max-width: 480px) {
-    .app-header h1 {
-        font-size: 2rem;
-    }
+/* -------- Chunk 9: Button Hover Effects -------- */
+.send-btn:hover { background: #6b6bff; }
+.voice-btn:hover { background: #ff6b6b; }
 
-    .tagline {
-        font-size: 0.85rem;
-    }
-
-    .send-btn, .voice-btn {
-        padding: 10px 15px;
-        font-size: 0.85rem;
-    }
-
-    .feature-icons {
-        gap: 15px;
-    }
-
-    .feature img {
-        width: 35px;
-        height: 35px;
-    }
-}
+/* -------- Chunk 10: Miscellaneous Styling -------- */
+.interaction-area { display: flex; flex-direction: column; height: 100%; }
+.input-area input::placeholder { color: #bbb; }
+.feature p { font-size: 0.85rem; color: #ccc; margin-top: 3px; }
