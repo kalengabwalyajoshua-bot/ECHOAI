@@ -1,6 +1,6 @@
 /* ===================== EchoAI Futuristic Style.css ===================== */
 
-/* --- General Reset & Fonts --- */
+/* --- Reset & Fonts --- */
 * {
   margin: 0;
   padding: 0;
@@ -11,70 +11,65 @@
 body {
   background: radial-gradient(circle at 30% 30%, #0c0c1e, #1a1a2e, #0f0c29);
   color: #e0e0ff;
-  overflow: hidden;
+  overflow-x: hidden;
 }
+
+/* --- Headings --- */
+h1, h2, p {
+  text-shadow: 0 0 20px #8a2be2, 0 0 40px #6a0dad;
+}
+
+h1 { font-size: 3rem; letter-spacing: 2px; margin-bottom: 10px; }
+h2 { font-size: 2rem; margin-bottom: 15px; }
+p { font-size: 1.2rem; margin-bottom: 20px; }
 
 /* --- Buttons --- */
 button {
   cursor: pointer;
   border: none;
-  border-radius: 12px;
-  padding: 12px 25px;
+  border-radius: 20px;
+  padding: 15px 30px;
+  margin: 10px;
   font-size: 1.1rem;
   font-weight: bold;
-  background: linear-gradient(45deg, #6a0dad, #8a2be2);
   color: #fff;
-  box-shadow: 0 0 15px #8a2be2, 0 0 30px #6a0dad;
-  transition: 0.3s;
+  background: linear-gradient(45deg, #6a0dad, #8a2be2);
+  box-shadow: 0 0 20px #6a0dad, 0 0 40px #8a2be2;
+  transition: 0.4s;
 }
 
 button:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 25px #8a2be2, 0 0 50px #6a0dad;
+  transform: scale(1.1);
+  box-shadow: 0 0 40px #8a2be2, 0 0 80px #6a0dad;
 }
 
-/* --- Glowing App Icon --- */
+/* --- Home Screen --- */
+#home-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  animation: screenFadeIn 1.5s ease-in-out;
+}
+
 .app-icon-glow {
-  width: 130px;
-  height: 130px;
-  margin-bottom: 20px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   background: radial-gradient(circle, #6a0dad 0%, #2e0d4f 70%);
-  box-shadow: 0 0 35px #8a2be2, 0 0 70px #6a0dad;
+  box-shadow: 0 0 40px #8a2be2, 0 0 80px #6a0dad;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.5s ease-in-out;
-}
-
-.app-icon-glow:hover {
-  transform: scale(1.2) rotate(15deg);
-}
-
-.app-icon {
-  width: 70%;
-  height: 70%;
-}
-
-/* --- Headings & Text --- */
-h1 {
-  font-size: 3rem;
-  letter-spacing: 2px;
-  text-shadow: 0 0 20px #8a2be2, 0 0 40px #6a0dad;
-  margin-bottom: 10px;
-}
-
-h2 {
-  font-size: 2rem;
-  margin-bottom: 15px;
-  text-shadow: 0 0 15px #0ff, 0 0 25px #00ffff;
-}
-
-p {
-  font-size: 1.2rem;
   margin-bottom: 20px;
-  text-shadow: 0 0 10px #6a0dad;
 }
+
+.app-icon-glow:hover { transform: scale(1.2) rotate(15deg); }
+
+.app-icon { width: 70%; height: 70%; }
 
 /* --- Response Container --- */
 #response-container {
@@ -90,31 +85,19 @@ p {
   transition: 0.4s;
 }
 
-/* --- Home Screen --- */
-#home-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
-  animation: screenFadeIn 1.5s ease-in-out;
-}
-
-/* --- Story Section --- */
+/* --- Stories Section --- */
 #story-music-screen {
   position: absolute;
-  top: 10%;
+  top: 5%;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(20, 10, 40, 0.75);
   padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 0 35px #6a0dad, 0 0 70px #8a2be2 inset;
+  border-radius: 25px;
+  box-shadow: 0 0 40px #6a0dad, 0 0 80px #8a2be2 inset;
   width: 90%;
-  max-width: 900px;
+  max-width: 1000px;
   text-align: center;
-  animation: fadeInUp 1s ease forwards;
 }
 
 #story-container {
@@ -122,40 +105,23 @@ p {
   padding: 20px;
   border-radius: 15px;
   background: rgba(10, 5, 30, 0.6);
-  min-height: 140px;
+  min-height: 150px;
   font-size: 1.25rem;
-  box-shadow: 0 0 20px #0ff inset;
+  box-shadow: 0 0 25px #0ff inset;
 }
 
 /* Story Buttons */
 .story-btn {
   background: linear-gradient(45deg, #00ffff, #0ff);
-  box-shadow: 0 0 20px #0ff, 0 0 40px #00ffff;
   color: #000;
   font-weight: bold;
   transition: 0.3s;
+  box-shadow: 0 0 25px #00ffff, 0 0 50px #0ff;
 }
 
 .story-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 35px #00ffff, 0 0 70px #0ff;
-}
-
-/* --- Control Panel --- */
-#control-panel {
-  position: absolute;
-  bottom: 5%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(15, 10, 35, 0.85);
-  padding: 25px;
-  border-radius: 25px;
-  box-shadow: 0 0 40px #8a2be2;
-  text-align: center;
-}
-
-.control-buttons button {
-  margin: 10px;
+  transform: scale(1.12);
+  box-shadow: 0 0 50px #00ffff, 0 0 100px #0ff;
 }
 
 /* --- Voice Status --- */
@@ -177,11 +143,8 @@ p {
   top: 0;
   left: 0;
   z-index: -1;
-}
-
-/* --- Hidden Screens --- */
-.hidden-screen {
-  display: none;
+  width: 100%;
+  height: 100%;
 }
 
 /* --- Animations --- */
@@ -190,26 +153,10 @@ p {
   100% { opacity: 1; transform: scale(1); }
 }
 
-@keyframes fadeInUp {
-  0% { opacity: 0; transform: translateY(30px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
 @keyframes pulseGlow {
   0% { box-shadow: 0 0 20px #6a0dad, 0 0 40px #8a2be2 inset; }
   50% { box-shadow: 0 0 40px #8a2be2, 0 0 80px #6a0dad inset; }
   100% { box-shadow: 0 0 20px #6a0dad, 0 0 40px #8a2be2 inset; }
-}
-
-/* --- Hover Glow Effects --- */
-button:hover, .app-icon-glow:hover {
-  animation: hoverGlow 0.8s forwards;
-}
-
-@keyframes hoverGlow {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1) rotate(5deg); }
-  100% { transform: scale(1.08) rotate(0deg); }
 }
 
 /* --- Responsive --- */
