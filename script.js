@@ -1,211 +1,271 @@
-/* ===========================
-   GLOBAL VARIABLES
-=========================== */
-const messages = document.getElementById('messages');
+/* =============================
+   EchoAI Script - script.js
+   Fully Functional & Interactive
+============================= */
+
+const chatWindow = document.getElementById('chatWindow');
 const userInput = document.getElementById('userInput');
 const sendBtn = document.getElementById('sendBtn');
 const voiceBtn = document.getElementById('voiceBtn');
-const storyBtn = document.getElementById('storyBtn');
-const storyOverlay = document.getElementById('storyOverlay');
-const storyContent = document.getElementById('storyContent');
-const closeStory = document.getElementById('closeStory');
-const music = document.getElementById('music');
-const nowPlaying = document.getElementById('nowPlaying');
-const aiOrb = document.getElementById('aiOrb');
-const floatingOrbs = document.querySelectorAll('.floating-orb');
+const glowBubble = document.getElementById('glowBubble');
+const storyFeature = document.getElementById('storyFeature');
+const musicFeature = document.getElementById('musicFeature');
+const controlFeature = document.getElementById('controlFeature');
 
-/* ===========================
-   CHAT RESPONSES
-=========================== */
+const backgroundMusic = document.getElementById('backgroundMusic');
+const storyAudio = document.getElementById('storyAudio');
+
+/* ----------------------------
+   AI Response Database
+---------------------------- */
 const responses = {
-    hello: ["Hello there! How's your day going?", "Hi! I'm EchoAI, your magical companion!"],
-    howareyou: ["I'm just a bunch of code, but feeling electric!", "Great! Excited to chat with you."],
-    default: ["Interesting… tell me more.", "I see! Can you explain further?", "Hmm… fascinating!"]
+    greetings: [
+        "Hello! How’s your day going?",
+        "Hey there! Ready to explore?",
+        "Hi! I’m EchoAI, your companion."
+    ],
+    farewell: [
+        "Goodbye! Talk soon.",
+        "See you later! Stay awesome.",
+        "Catch you later!"
+    ],
+    stories: [
+        {
+            title: "Calm Forest",
+            audio: "assets/stories/calm_forest.mp3",
+            text: "Close your eyes and imagine walking through a calm forest..."
+        },
+        {
+            title: "Stormy Adventure",
+            audio: "assets/stories/stormy_adventure.mp3",
+            text: "Thunder rumbles as you step into the stormy mountains..."
+        },
+        {
+            title: "Ocean Escape",
+            audio: "assets/stories/ocean_escape.mp3",
+            text: "Waves crash gently as you drift into the endless blue ocean..."
+        },
+        {
+            title: "Magical Night",
+            audio: "assets/stories/magical_night.mp3",
+            text: "Stars twinkle as magic fills the night sky..."
+        },
+        {
+            title: "Anger Release",
+            audio: "assets/stories/anger_release.mp3",
+            text: "Take a deep breath and imagine releasing all your anger..."
+        },
+        {
+            title: "Joyful Meadow",
+            audio: "assets/stories/joyful_meadow.mp3",
+            text: "Birds chirp as sunlight floods the vibrant meadow..."
+        }
+    ],
+    music: [
+        "assets/music/soothing1.mp3",
+        "assets/music/ambient1.mp3",
+        "assets/music/relax1.mp3"
+    ],
+    unknown: [
+        "Hmm, I’m not sure about that. Can you rephrase?",
+        "Interesting... I need to think more about that!",
+        "Sorry, I don't know that yet."
+    ],
+    phoneControl: {
+        call: "Simulating a call...",
+        sms: "Pretending to send a message...",
+        toggleData: "Toggling mobile data..."
+    }
 };
 
-function getResponse(text) {
-    const cleanText = text.toLowerCase().replace(/[^a-zA-Z ]/g, '');
-    if(cleanText.includes('hello') || cleanText.includes('hi')) return randomChoice(responses.hello);
-    if(cleanText.includes('how are you')) return randomChoice(responses.howareyou);
-    return randomChoice(responses.default);
-}
-
-function randomChoice(arr) {
-    return arr[Math.floor(Math.random()*arr.length)];
-}
-
-/* ===========================
-   SEND MESSAGE FUNCTION
-=========================== */
-function sendMessage() {
-    const userText = userInput.value.trim();
-    if(userText === '') return;
-    appendMessage(userText, 'user');
-    userInput.value = '';
-
-    // AI response
-    const aiText = getResponse(userText);
-    setTimeout(() => {
-        appendMessage(aiText, 'ai');
-        speakText(aiText);
-        animateOrb();
-    }, 800);
-}
-
-function appendMessage(text, type) {
+/* ----------------------------
+   Helper Functions
+---------------------------- */
+function addMessage(content, sender = 'system') {
     const msg = document.createElement('div');
-    msg.classList.add('message', type);
-    msg.textContent = text;
-    messages.appendChild(msg);
-    messages.scrollTop = messages.scrollHeight;
+    msg.classList.add('message');
+    msg.classList.add(sender);
+    msg.textContent = content;
+    chatWindow.appendChild(msg);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+    animateGlowBubble();
 }
 
-/* ===========================
-   VOICE COMMANDS
-=========================== */
-let recognition;
-if('webkitSpeechRecognition' in window){
-    recognition = new webkitSpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.lang = 'en-US';
+function randomChoice(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
 
-    recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-        userInput.value = transcript;
-        sendMessage();
+function animateGlowBubble() {
+    glowBubble.style.transform = 'scale(1.3)';
+    setTimeout(() => {
+        glowBubble.style.transform = 'scale(1)';
+    }, 300);
+}
+
+/* ----------------------------
+   Text Input Handling
+---------------------------- */
+sendBtn.addEventListener('click', () => {
+    const text = userInput.value.trim();
+    if (text === "") return;
+    addMessage(text, 'user');
+    userInput.value = '';
+    processInput(text);
+});
+
+userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        sendBtn.click();
     }
+});
+
+/* ----------------------------
+   Voice Input Handling
+---------------------------- */
+let recognition;
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+        addMessage("🎤 Listening...", "system");
+    };
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        addMessage(transcript, 'user');
+        processInput(transcript);
+    };
+
+    recognition.onerror = (event) => {
+        addMessage("Voice recognition error, please try again.", "system");
+    };
+} else {
+    voiceBtn.disabled = true;
+    voiceBtn.textContent = "Voice not supported";
 }
 
 voiceBtn.addEventListener('click', () => {
-    if(recognition) recognition.start();
+    if (recognition) recognition.start();
 });
 
-/* ===========================
-   SPEECH SYNTHESIS
-=========================== */
-function speakText(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    utterance.rate = 1;
-    utterance.pitch = 1.2;
-    speechSynthesis.speak(utterance);
+/* ----------------------------
+   Input Processing
+---------------------------- */
+function processInput(text) {
+    text = text.toLowerCase();
+
+    if (text.includes("hello") || text.includes("hi")) {
+        addMessage(randomChoice(responses.greetings));
+    } else if (text.includes("bye") || text.includes("goodbye")) {
+        addMessage(randomChoice(responses.farewell));
+    } else if (text.includes("story")) {
+        tellRandomStory();
+    } else if (text.includes("music")) {
+        playRandomMusic();
+    } else if (text.includes("call") || text.includes("message") || text.includes("data")) {
+        controlPhone(text);
+    } else {
+        addMessage(randomChoice(responses.unknown));
+    }
 }
 
-/* ===========================
-   AI ORB ANIMATION
-=========================== */
-function animateOrb() {
-    aiOrb.style.transform = 'translate(-50%, -50%) scale(1.2)';
+/* ----------------------------
+   Story Feature
+---------------------------- */
+function tellRandomStory() {
+    const story = randomChoice(responses.stories);
+    addMessage(`🎬 ${story.title}: ${story.text}`);
+    storyAudio.src = story.audio;
+    storyAudio.play();
+}
+
+/* ----------------------------
+   Music Feature
+---------------------------- */
+function playRandomMusic() {
+    const music = randomChoice(responses.music);
+    backgroundMusic.src = music;
+    backgroundMusic.play();
+    addMessage("🎵 Playing music for you...");
+}
+
+/* ----------------------------
+   Phone Control Simulation
+---------------------------- */
+function controlPhone(command) {
+    let response = "";
+    if (command.includes("call")) response = responses.phoneControl.call;
+    else if (command.includes("message")) response = responses.phoneControl.sms;
+    else if (command.includes("data")) response = responses.phoneControl.toggleData;
+    else response = "Cannot control this feature yet.";
+
+    addMessage(`📱 ${response}`);
+}
+
+/* ----------------------------
+   Feature Button Events
+---------------------------- */
+storyFeature.addEventListener('click', () => {
+    tellRandomStory();
+});
+
+musicFeature.addEventListener('click', () => {
+    playRandomMusic();
+});
+
+controlFeature.addEventListener('click', () => {
+    addMessage("📱 Phone control feature clicked. Use voice commands to interact.");
+});
+
+/* ----------------------------
+   Glow Bubble Interaction
+---------------------------- */
+glowBubble.addEventListener('click', () => {
+    addMessage("💡 You clicked the EchoAI bubble! What shall we do?");
+});
+
+/* ----------------------------
+   Background Music Controls
+---------------------------- */
+backgroundMusic.addEventListener('ended', () => {
+    addMessage("🎵 Music ended. Want me to play another track?");
+});
+
+/* ----------------------------
+   Story Audio Controls
+---------------------------- */
+storyAudio.addEventListener('ended', () => {
+    addMessage("📖 Story finished. Do you want another one?");
+});
+
+/* ----------------------------
+   Auto-Greeting on Load
+---------------------------- */
+window.addEventListener('load', () => {
     setTimeout(() => {
-        aiOrb.style.transform = 'translate(-50%, -50%) scale(1)';
+        addMessage("✨ EchoAI is online! Speak or type to start...");
     }, 500);
-}
-
-/* ===========================
-   FLOATING ORBS ANIMATION
-=========================== */
-function animateFloatingOrbs() {
-    floatingOrbs.forEach((orb, index) => {
-        const offset = Math.random() * 20;
-        orb.style.transform = `translate(${offset}px, ${-offset}px)`;
-        setTimeout(()=>{ orb.style.transform = 'translate(0,0)'; }, 3000 + index*100);
-    });
-}
-setInterval(animateFloatingOrbs, 4000);
-
-/* ===========================
-   MUSIC PLAYER
-=========================== */
-music.addEventListener('play', () => {
-    nowPlaying.textContent = "Playing: " + (music.currentSrc.split('/').pop() || "Unknown Track");
 });
 
-music.addEventListener('pause', () => {
-    nowPlaying.textContent = "Music Paused 🎵";
-});
-
-music.addEventListener('ended', () => {
-    nowPlaying.textContent = "No music playing 🎵";
-});
-
-/* ===========================
-   STORY MODE
-=========================== */
-const bedtimeStories = [
-    "Once upon a time in a mystical forest, the stars whispered secrets to the moon...",
-    "Far away in a land of endless skies, a young magician learned the true power of kindness...",
-    "In the depths of a glowing cave, creatures of light sang lullabies to the world..."
-];
-
-storyBtn.addEventListener('click', () => {
-    storyOverlay.style.display = 'flex';
-    showRandomStory();
-});
-
-closeStory.addEventListener('click', () => {
-    storyOverlay.style.display = 'none';
-    storyContent.innerHTML = '';
-});
-
-function showRandomStory() {
-    const story = randomChoice(bedtimeStories);
-    storyContent.innerHTML = '';
+/* ----------------------------
+   Extra Feature: Typing Simulation
+---------------------------- */
+function typeMessage(msg, sender='system') {
+    const msgEl = document.createElement('div');
+    msgEl.classList.add('message', sender);
+    chatWindow.appendChild(msgEl);
     let i = 0;
-    const interval = setInterval(() => {
-        if(i < story.length){
-            storyContent.innerHTML += story[i];
+    function typeChar() {
+        if (i < msg.length) {
+            msgEl.textContent += msg[i];
             i++;
-        } else {
-            clearInterval(interval);
-            speakText(story);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            setTimeout(typeChar, 30);
         }
-    }, 50);
+    }
+    typeChar();
 }
-
-/* ===========================
-   ENTER KEY SEND
-=========================== */
-userInput.addEventListener('keypress', (e) => {
-    if(e.key === 'Enter') sendMessage();
-});
-
-/* ===========================
-   BACKGROUND PARTICLES
-=========================== */
-const canvas = document.getElementById('bgCanvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const particles = [];
-for(let i=0;i<150;i++){
-    particles.push({
-        x: Math.random()*canvas.width,
-        y: Math.random()*canvas.height,
-        r: Math.random()*2+1,
-        dx: (Math.random()-0.5)*0.5,
-        dy: (Math.random()-0.5)*0.5
-    });
-}
-
-function animateParticles(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    particles.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-        ctx.fillStyle = 'rgba(0,255,255,0.6)';
-        ctx.fill();
-        p.x += p.dx;
-        p.y += p.dy;
-        if(p.x<0||p.x>canvas.width) p.dx*=-1;
-        if(p.y<0||p.y>canvas.height) p.dy*=-1;
-    });
-    requestAnimationFrame(animateParticles);
-}
-animateParticles();
-
-window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
