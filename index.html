@@ -3,81 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EchoAI - Your AI Companion</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="assets/icon.png" type="image/png">
-    <!-- Google Fonts -->
+    <title>EchoAI - AI Companion</title>
+    <link rel="icon" href="https://img.icons8.com/color/48/000000/ai.png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* Basic Reset */
+        /* ========= Reset & Base ========= */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
-        html, body { height: 100%; background: #0f0f1a; color: #ffffff; overflow-x: hidden; }
+        html, body { width: 100%; height: 100%; background: #0f0f1a; color: #fff; overflow-x: hidden; }
+        .app-container { display: flex; flex-direction: column; justify-content: space-between; max-width: 1000px; margin: 0 auto; height: 100vh; padding: 20px; }
+
+        /* ========= Header ========= */
+        .app-header { text-align: center; margin-bottom: 20px; }
+        .app-header .logo { width: 60px; height: 60px; margin-bottom: 10px; }
+        .app-header h1 { font-size: 2.5rem; color: #fff; }
+        .app-header p { font-size: 1rem; color: #aaa; margin-top: 5px; }
+
+        /* ========= Chat Window ========= */
+        .chat-window { flex: 1; overflow-y: auto; padding: 15px; border-radius: 10px; background: #1a1a40; margin-bottom: 15px; }
+        .message { padding: 10px 15px; border-radius: 10px; margin-bottom: 10px; max-width: 80%; word-wrap: break-word; }
+        .message.user { background: #4b4bff; color: #fff; align-self: flex-end; }
+        .message.system { background: #2a2a60; color: #fff; align-self: flex-start; }
+
+        /* ========= Input Area ========= */
+        .input-area { display: flex; gap: 10px; }
+        .input-area input { flex: 1; padding: 10px 15px; border-radius: 10px; border: none; outline: none; background: #2a2a60; color: #fff; }
+        .send-btn, .voice-btn { padding: 10px 15px; border-radius: 10px; border: none; cursor: pointer; font-weight: 500; }
+        .send-btn { background: #4b4bff; color: #fff; transition: transform 0.2s; }
+        .send-btn:hover { transform: scale(1.05); }
+        .voice-btn { background: #ff4b4b; color: #fff; display: flex; align-items: center; gap: 5px; animation: glowPulse 2s infinite; }
+        @keyframes glowPulse { 0%,100% { box-shadow: 0 0 10px #ff4b4b; } 50% { box-shadow: 0 0 25px #ff4b4b; } }
+
+        /* ========= Footer / Features ========= */
+        .app-footer { margin-top: 15px; text-align: center; }
+        .feature-icons { display: flex; justify-content: space-around; margin-bottom: 10px; }
+        .feature { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s; }
+        .feature:hover { transform: scale(1.1); }
+        .feature img { width: 40px; height: 40px; margin-bottom: 5px; }
+        .version { font-size: 0.8rem; color: #aaa; }
+
+        /* ========= Background Glow ========= */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 150%; height: 150%;
+            background: radial-gradient(circle at 30% 30%, #1a1a40, #0f0f1a 50%);
+            filter: blur(100px);
+            z-index: -1;
+        }
     </style>
 </head>
 <body>
-    <!-- Glowing Background -->
-    <div class="glow-bg"></div>
-
-    <!-- Main App Container -->
     <div class="app-container">
         <!-- Header -->
         <header class="app-header">
-            <div class="logo-container">
-                <img src="assets/logo.png" alt="EchoAI Logo" class="logo">
-                <h1>EchoAI</h1>
-            </div>
-            <p class="tagline">Your Empathy-Powered AI Companion</p>
+            <img src="https://img.icons8.com/color/48/000000/ai.png" alt="EchoAI Logo" class="logo">
+            <h1>EchoAI</h1>
+            <p>Your Empathy-Powered AI Companion</p>
         </header>
 
-        <!-- Interaction Area -->
+        <!-- Main Chat Window -->
         <main class="interaction-area">
-            <!-- Chat Window -->
-            <div class="chat-window" id="chatWindow">
+            <div id="chatWindow" class="chat-window">
                 <div class="message system">Hello! I’m EchoAI. How can I help you today?</div>
             </div>
 
-            <!-- Voice Input Button -->
-            <div class="voice-control">
-                <button id="voiceBtn" class="voice-btn">
-                    <img src="assets/mic.png" alt="Voice Icon"> Speak
-                </button>
-            </div>
-
-            <!-- Text Input Area -->
-            <div class="text-input-area">
+            <!-- Input Area -->
+            <div class="input-area">
                 <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off">
                 <button id="sendBtn" class="send-btn">Send</button>
+                <button id="voiceBtn" class="voice-btn">
+                    <img src="https://img.icons8.com/ios-filled/24/ffffff/microphone.png" alt="Mic Icon"> Speak
+                </button>
             </div>
         </main>
 
-        <!-- Footer with Features -->
+        <!-- Feature Section -->
         <footer class="app-footer">
             <div class="feature-icons">
-                <div class="feature" id="storyFeature">
-                    <img src="assets/story.png" alt="Story Icon">
+                <div id="storyFeature" class="feature">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/book.png" alt="Story Icon">
                     <p>Stories</p>
                 </div>
-                <div class="feature" id="musicFeature">
-                    <img src="assets/music.png" alt="Music Icon">
+                <div id="musicFeature" class="feature">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/musical-notes.png" alt="Music Icon">
                     <p>Music</p>
                 </div>
-                <div class="feature" id="controlFeature">
-                    <img src="assets/control.png" alt="Control Icon">
+                <div id="controlFeature" class="feature">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/phone.png" alt="Control Icon">
                     <p>Phone Control</p>
                 </div>
             </div>
-            <p class="version-info">EchoAI v1.0.0 &copy; 2026</p>
+            <p class="version">EchoAI v1.0.0 &copy; 2026</p>
         </footer>
+
+        <!-- Hidden Audio Elements -->
+        <audio id="backgroundMusic" loop></audio>
+        <audio id="storyAudio"></audio>
     </div>
 
-    <!-- Hidden Audio Elements -->
-    <audio id="backgroundMusic" loop></audio>
-    <audio id="storyAudio"></audio>
+    <!-- Script -->
+    <script>
+        // =========================
+        // EchoAI Full JS
+        // =========================
 
-    <!-- Floating Glowing Interaction Bubble -->
-    <div class="glow-bubble" id="glowBubble"></div>
+        const chatWindow = document.getElementById('chatWindow');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const storyFeature = document.getElementById('storyFeature');
+        const musicFeature = document.getElementById('musicFeature');
+        const controlFeature = document.getElementById('controlFeature');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const storyAudio = document.getElementById('storyAudio');
 
-    <!-- Scripts -->
-    <script src="script.js"></script>
+        const responses = {
+            greetings: ["Hello! How’s your day?", "Hey there! Ready to explore?", "Hi! I’m EchoAI."],
+            farewell: ["Goodbye! Talk soon.", "See you later! Stay awesome.", "Catch you later!"],
+            stories: [
+                {title:"Calm Forest", audio:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", text:"Imagine walking through a calm forest..."},
+                {title:"Stormy Adventure", audio:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", text:"Thunder rumbles as you step into stormy mountains..."},
+                {title:"Ocean Escape", audio:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", text:"Waves crash gently as you drift into the endless ocean..."}
+            ],
+            music: [
+                "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3"
+            ],
+            unknown: ["Hmm, I’m not sure. Can you rephrase?", "Interesting... I need to think more!", "Sorry, I don't know that yet."],
+            phoneControl: {call:"Simulating a call...", sms:"Pretending to send a message...", toggleData:"Toggling mobile data..."}
+        };
+
+        function addMessage(content,sender='system'){
+            const msg=document.createElement('div');
+            msg.classList.add('message',sender);
+            msg.textContent=content;
+            chatWindow.appendChild(msg);
+            chatWindow.scrollTop=chatWindow.scrollHeight;
+        }
+
+        function randomChoice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+        function processInput(text){
+            text=text.toLowerCase();
+            if(text.includes("hello")||text.includes("hi")) addMessage(randomChoice(responses.greetings));
+            else if(text.includes("bye")||text.includes("goodbye")) addMessage(randomChoice(responses.farewell));
+            else if(text.includes("story")) tellRandomStory();
+            else if(text.includes("music")) playRandomMusic();
+            else if(text.includes("call")||text.includes("message")||text.includes("data")) controlPhone(text);
+            else addMessage(randomChoice(responses.unknown));
+        }
+
+        function tellRandomStory(){
+            const story=randomChoice(responses.stories);
+            addMessage(`🎬 ${story.title}: ${story.text}`);
+            storyAudio.src=story.audio; storyAudio.play();
+        }
+
+        function playRandomMusic(){
+            const music=randomChoice(responses.music);
+            backgroundMusic.src=music; backgroundMusic.play();
+            addMessage("🎵 Playing music for you...");
+        }
+
+        function controlPhone(cmd){
+            let resp="";
+            if(cmd.includes("call")) resp=responses.phoneControl.call;
+            else if(cmd.includes("message")) resp=responses.phoneControl.sms;
+            else if(cmd.includes("data")) resp=responses.phoneControl.toggleData;
+            else resp="Cannot control this feature yet.";
+            addMessage(`📱 ${resp}`);
+        }
+
+        sendBtn.addEventListener('click',()=>{const t=userInput.value.trim();if(t==="")return;addMessage(t,'user');userInput.value='';processInput(t);});
+        userInput.addEventListener('keypress',(e)=>{if(e.key==='Enter') sendBtn.click();});
+        
+        storyFeature.addEventListener('click',tellRandomStory);
+        musicFeature.addEventListener('click',playRandomMusic);
+        controlFeature.addEventListener('click',()=>{addMessage("📱 Phone control clicked. Use commands.");});
+
+        // ===== Voice Recognition =====
+        let recognition;
+        if('webkitSpeechRecognition' in window||'SpeechRecognition' in window){
+            const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+            recognition=new SpeechRecognition(); recognition.continuous=false; recognition.lang='en-US'; recognition.interimResults=false;
+            recognition.onstart=()=>{addMessage("🎤 Listening...",'system');}
+            recognition.onresult=(e)=>{const t=e.results[0][0].transcript; addMessage(t,'user'); processInput(t);}
+            recognition.onerror=()=>{addMessage("Voice recognition error. Try again.",'system');}
+            voiceBtn.addEventListener('click',()=>{if(recognition) recognition.start();});
+        } else { voiceBtn.disabled=true; voiceBtn.textContent="Voice not supported"; }
+
+        window.addEventListener('load',()=>{setTimeout(()=>{addMessage("✨ EchoAI is online! Speak or type to start...");},500);});
+    </script>
 </body>
 </html>
