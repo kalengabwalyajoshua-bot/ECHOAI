@@ -1,6 +1,6 @@
 /* =============================
    EchoAI Script - script.js
-   Fully Functional & Interactive
+   Fully Functional with Online Music & Stories
 ============================= */
 
 const chatWindow = document.getElementById('chatWindow');
@@ -32,39 +32,39 @@ const responses = {
     stories: [
         {
             title: "Calm Forest",
-            audio: "assets/stories/calm_forest.mp3",
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
             text: "Close your eyes and imagine walking through a calm forest..."
         },
         {
             title: "Stormy Adventure",
-            audio: "assets/stories/stormy_adventure.mp3",
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
             text: "Thunder rumbles as you step into the stormy mountains..."
         },
         {
             title: "Ocean Escape",
-            audio: "assets/stories/ocean_escape.mp3",
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
             text: "Waves crash gently as you drift into the endless blue ocean..."
         },
         {
             title: "Magical Night",
-            audio: "assets/stories/magical_night.mp3",
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
             text: "Stars twinkle as magic fills the night sky..."
         },
         {
             title: "Anger Release",
-            audio: "assets/stories/anger_release.mp3",
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
             text: "Take a deep breath and imagine releasing all your anger..."
         },
         {
             title: "Joyful Meadow",
-            audio: "assets/stories/joyful_meadow.mp3",
+            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
             text: "Birds chirp as sunlight floods the vibrant meadow..."
         }
     ],
     music: [
-        "assets/music/soothing1.mp3",
-        "assets/music/ambient1.mp3",
-        "assets/music/relax1.mp3"
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3"
     ],
     unknown: [
         "Hmm, I’m not sure about that. Can you rephrase?",
