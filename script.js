@@ -1,182 +1,211 @@
-// ====== Elements ======
+/* ===========================
+   GLOBAL VARIABLES
+=========================== */
 const messages = document.getElementById('messages');
 const userInput = document.getElementById('userInput');
 const sendBtn = document.getElementById('sendBtn');
 const voiceBtn = document.getElementById('voiceBtn');
-const musicPlayer = document.getElementById('music');
+const storyBtn = document.getElementById('storyBtn');
+const storyOverlay = document.getElementById('storyOverlay');
+const storyContent = document.getElementById('storyContent');
+const closeStory = document.getElementById('closeStory');
+const music = document.getElementById('music');
 const nowPlaying = document.getElementById('nowPlaying');
 const aiOrb = document.getElementById('aiOrb');
-const synth = window.speechSynthesis;
+const floatingOrbs = document.querySelectorAll('.floating-orb');
 
-// ====== Initial Magical Messages ======
-const magicalGreetings = [
-  "🌟 Welcome to EchoAI, your magical companion!",
-  "✨ The stars are listening… ask anything!",
-  "💫 Your emotions guide my music and words."
-];
-magicalGreetings.forEach(msg => addMessage(msg,'ai'));
+/* ===========================
+   CHAT RESPONSES
+=========================== */
+const responses = {
+    hello: ["Hello there! How's your day going?", "Hi! I'm EchoAI, your magical companion!"],
+    howareyou: ["I'm just a bunch of code, but feeling electric!", "Great! Excited to chat with you."],
+    default: ["Interesting… tell me more.", "I see! Can you explain further?", "Hmm… fascinating!"]
+};
 
-// ====== Add Message Function ======
-function addMessage(text,sender){
-  const div=document.createElement('div');
-  div.classList.add('message',sender);
-  div.textContent=text;
-  messages.appendChild(div);
-  messages.scrollTop = messages.scrollHeight;
+function getResponse(text) {
+    const cleanText = text.toLowerCase().replace(/[^a-zA-Z ]/g, '');
+    if(cleanText.includes('hello') || cleanText.includes('hi')) return randomChoice(responses.hello);
+    if(cleanText.includes('how are you')) return randomChoice(responses.howareyou);
+    return randomChoice(responses.default);
 }
 
-// ====== Text-to-Speech ======
-function speak(text){
-  if(synth.speaking) synth.cancel(); // Stop previous
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'en-US';
-  synth.speak(utter);
+function randomChoice(arr) {
+    return arr[Math.floor(Math.random()*arr.length)];
 }
 
-// ====== Emotion Detection ======
-function detectEmotion(text){
-  text = text.toLowerCase();
-  if(/happy|good|great|awesome|yay|fantastic|amazing/.test(text)) return 'happy';
-  if(/sad|unhappy|lonely|bad|upset|depressed/.test(text)) return 'sad';
-  if(/angry|mad|hate|annoyed|frustrated/.test(text)) return 'angry';
-  return 'neutral';
+/* ===========================
+   SEND MESSAGE FUNCTION
+=========================== */
+function sendMessage() {
+    const userText = userInput.value.trim();
+    if(userText === '') return;
+    appendMessage(userText, 'user');
+    userInput.value = '';
+
+    // AI response
+    const aiText = getResponse(userText);
+    setTimeout(() => {
+        appendMessage(aiText, 'ai');
+        speakText(aiText);
+        animateOrb();
+    }, 800);
 }
 
-// ====== Mood Music ======
-function playMoodMusic(emotion){
-  let url="";
-  switch(emotion){
-    case 'happy': url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"; break;
-    case 'sad': url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"; break;
-    case 'angry': url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"; break;
-    default: url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"; break;
-  }
-  musicPlayer.src=url;
-  musicPlayer.play();
-  nowPlaying.textContent = `Playing ${emotion} music 🎵`;
-  updateOrbColor(emotion);
+function appendMessage(text, type) {
+    const msg = document.createElement('div');
+    msg.classList.add('message', type);
+    msg.textContent = text;
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
 }
 
-// ====== AI Response ======
-function aiResponse(text){
-  const emotion = detectEmotion(text);
-  let response="";
-  switch(emotion){
-    case 'happy':
-      response="😄 You sound happy! Let's keep the good vibes flowing!";
-      playMoodMusic('happy'); break;
-    case 'sad':
-      response="😢 It's okay to feel sad. I'm here with you.";
-      playMoodMusic('sad'); break;
-    case 'angry':
-      response="😡 Take a deep breath. Let's calm down together.";
-      playMoodMusic('angry'); break;
-    default:
-      response="🙂 I hear you. Tell me more.";
-      playMoodMusic('neutral'); break;
-  }
-  speak(response);
-  return response;
-}
+/* ===========================
+   VOICE COMMANDS
+=========================== */
+let recognition;
+if('webkitSpeechRecognition' in window){
+    recognition = new webkitSpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
 
-// ====== Update Orb Color Based on Mood ======
-function updateOrbColor(emotion){
-  switch(emotion){
-    case 'happy': aiOrb.style.background='radial-gradient(circle, #fffa65, #4ade80)'; break;
-    case 'sad': aiOrb.style.background='radial-gradient(circle, #3b82f6, #4ade80)'; break;
-    case 'angry': aiOrb.style.background='radial-gradient(circle, #f87171, #7f5af0)'; break;
-    default: aiOrb.style.background='radial-gradient(circle, #7f5af0, #4ade80)'; break;
-  }
-}
-
-// ====== Detect Commands (Simulation) ======
-function detectCommand(text){
-  text = text.toLowerCase();
-  if(/call (\d+)/.test(text)){
-    const num = text.match(/call (\d+)/)[1];
-    addMessage(`⚡ Calling ${num}... (Simulation)`, 'ai');
-    speak(`Calling ${num}`);
-    return true;
-  }
-  if(/open whatsapp/.test(text)){
-    addMessage(`⚡ Opening WhatsApp... (Simulation)`, 'ai');
-    speak(`Opening WhatsApp`);
-    return true;
-  }
-  if(/turn on wifi/.test(text)){
-    addMessage(`⚡ Turning Wi-Fi on... (Simulation)`, 'ai');
-    speak(`Turning Wi-Fi on`);
-    return true;
-  }
-  if(/turn off wifi/.test(text)){
-    addMessage(`⚡ Turning Wi-Fi off... (Simulation)`, 'ai');
-    speak(`Turning Wi-Fi off`);
-    return true;
-  }
-  return false;
-}
-
-// ====== Handle User Input ======
-function handleUserInput(text){
-  addMessage(text,'user');
-  if(!detectCommand(text)){
-    const reply = aiResponse(text);
-    addMessage(reply,'ai');
-  }
-}
-
-// ====== Send Button ======
-sendBtn.addEventListener('click',()=>{
-  const text = userInput.value.trim();
-  if(!text) return;
-  handleUserInput(text);
-  userInput.value="";
-});
-
-// ====== Voice Input ======
-voiceBtn.addEventListener('click',()=>{
-  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-  recognition.lang='en-US';
-  recognition.start();
-  recognition.onresult = (event)=>{
-    const text = event.results[0][0].transcript;
-    handleUserInput(text);
-  };
-});
-
-// ====== Magical Periodic Messages ======
-setInterval(()=>{
-  const magicals = [
-    "🌌 The stars whisper secrets to those who ask.",
-    "🔮 EchoAI senses your feelings and responds.",
-    "✨ Music flows with your mood like a magic river.",
-    "💫 The AI orb glows brighter when you are excited.",
-    "🌠 Your words ripple through the digital cosmos."
-  ];
-  const msg = magicals[Math.floor(Math.random()*magicals.length)];
-  addMessage(msg,'ai');
-}, 20000);
-
-// ====== Dynamic Emotion Feedback While Typing ======
-userInput.addEventListener('input',()=>{
-  const text = userInput.value.trim();
-  if(text.length > 5){
-    const emotion = detectEmotion(text);
-    if(emotion !== 'neutral'){
-      nowPlaying.textContent = `Detected mood: ${emotion} 🎵`;
-      playMoodMusic(emotion);
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        userInput.value = transcript;
+        sendMessage();
     }
-  }
+}
+
+voiceBtn.addEventListener('click', () => {
+    if(recognition) recognition.start();
 });
 
-// ====== Orb Animation Sync with Music ======
-setInterval(()=>{
-  const scale = 1 + Math.random() * 0.3;
-  aiOrb.style.transform = `scale(${scale})`;
-}, 1000);
-
-// ====== Extra: Magical Typing Simulation ======
-function aiThinkingSim(text){
-  addMessage("🤖 EchoAI is thinking...", 'ai');
-  setTimeout(()=>handleUserInput(text),1200);
+/* ===========================
+   SPEECH SYNTHESIS
+=========================== */
+function speakText(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 1;
+    utterance.pitch = 1.2;
+    speechSynthesis.speak(utterance);
 }
+
+/* ===========================
+   AI ORB ANIMATION
+=========================== */
+function animateOrb() {
+    aiOrb.style.transform = 'translate(-50%, -50%) scale(1.2)';
+    setTimeout(() => {
+        aiOrb.style.transform = 'translate(-50%, -50%) scale(1)';
+    }, 500);
+}
+
+/* ===========================
+   FLOATING ORBS ANIMATION
+=========================== */
+function animateFloatingOrbs() {
+    floatingOrbs.forEach((orb, index) => {
+        const offset = Math.random() * 20;
+        orb.style.transform = `translate(${offset}px, ${-offset}px)`;
+        setTimeout(()=>{ orb.style.transform = 'translate(0,0)'; }, 3000 + index*100);
+    });
+}
+setInterval(animateFloatingOrbs, 4000);
+
+/* ===========================
+   MUSIC PLAYER
+=========================== */
+music.addEventListener('play', () => {
+    nowPlaying.textContent = "Playing: " + (music.currentSrc.split('/').pop() || "Unknown Track");
+});
+
+music.addEventListener('pause', () => {
+    nowPlaying.textContent = "Music Paused 🎵";
+});
+
+music.addEventListener('ended', () => {
+    nowPlaying.textContent = "No music playing 🎵";
+});
+
+/* ===========================
+   STORY MODE
+=========================== */
+const bedtimeStories = [
+    "Once upon a time in a mystical forest, the stars whispered secrets to the moon...",
+    "Far away in a land of endless skies, a young magician learned the true power of kindness...",
+    "In the depths of a glowing cave, creatures of light sang lullabies to the world..."
+];
+
+storyBtn.addEventListener('click', () => {
+    storyOverlay.style.display = 'flex';
+    showRandomStory();
+});
+
+closeStory.addEventListener('click', () => {
+    storyOverlay.style.display = 'none';
+    storyContent.innerHTML = '';
+});
+
+function showRandomStory() {
+    const story = randomChoice(bedtimeStories);
+    storyContent.innerHTML = '';
+    let i = 0;
+    const interval = setInterval(() => {
+        if(i < story.length){
+            storyContent.innerHTML += story[i];
+            i++;
+        } else {
+            clearInterval(interval);
+            speakText(story);
+        }
+    }, 50);
+}
+
+/* ===========================
+   ENTER KEY SEND
+=========================== */
+userInput.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter') sendMessage();
+});
+
+/* ===========================
+   BACKGROUND PARTICLES
+=========================== */
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const particles = [];
+for(let i=0;i<150;i++){
+    particles.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        r: Math.random()*2+1,
+        dx: (Math.random()-0.5)*0.5,
+        dy: (Math.random()-0.5)*0.5
+    });
+}
+
+function animateParticles(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle = 'rgba(0,255,255,0.6)';
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if(p.x<0||p.x>canvas.width) p.dx*=-1;
+        if(p.y<0||p.y>canvas.height) p.dy*=-1;
+    });
+    requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
