@@ -1,372 +1,195 @@
-/* ===========================================
-   ECHOAI FULL STYLE.CSS - WHITE + BLUE THEME
-   Joshua Bwalya — Modern ChatGPT-inspired
-=========================================== */
-
-/* Reset & base */
+/* ===== Reset & Base ===== */
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
 }
-html, body {
-    height: 100%;
+body {
+    background: #0f0c29;
+    color: #fff;
+    overflow: hidden;
+    height: 100vh;
+}
+
+/* ===== Background & Stars ===== */
+#background {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-    background: #f7f9ff;
-    color: #0b0f1a;
+    height: 100%;
+    background: radial-gradient(circle at top, #0f0c29, #302b63, #24243e);
+    z-index: -1;
     overflow: hidden;
 }
 
-/* ===========================================
-   SCREEN MANAGEMENT
-=========================================== */
-.screen {
-    display: none;
-    width: 100%;
-    height: calc(100% - 60px);
-    overflow-y: auto;
+#background::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: url('https://i.ibb.co/4VQn8v7/stars.png') repeat;
+    animation: floatStars 120s linear infinite;
+    opacity: 0.4;
+}
+
+@keyframes floatStars {
+    0% { transform: translate(0,0); }
+    100% { transform: translate(-100px,-100px); }
+}
+
+/* ===== Chat Container ===== */
+.chat-container {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 550px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 20px;
     padding: 20px;
-}
-.screen.screen-active {
-    display: block;
-}
-
-/* ===========================================
-   TOP STATUS BAR
-=========================================== */
-#top-status-bar {
-    height: 40px;
+    box-shadow: 0 0 30px #7f5af0;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 10px;
-    background: #ffffff;
-    font-size: 14px;
-    border-bottom: 1px solid #cce0ff;
+    flex-direction: column;
 }
 
-/* ===========================================
-   BOTTOM NAVIGATION
-=========================================== */
-#bottom-navigation {
+#messages {
+    max-height: 350px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.message {
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.user {
+    background: #7f5af0;
+    color: #fff;
+    align-self: flex-end;
+}
+
+.ai {
+    background: #4ade80;
+    color: #000;
+    align-self: flex-start;
+}
+
+/* ===== Input Area ===== */
+.input-area {
+    display: flex;
+    gap: 5px;
+}
+
+.input-area input {
+    flex: 1;
+    padding: 12px 15px;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.input-area input::placeholder {
+    color: #ddd;
+}
+
+.input-area button {
+    padding: 12px 15px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    background: #7f5af0;
+    color: #fff;
+    transition: 0.3s;
+    font-size: 1rem;
+}
+
+.input-area button:hover {
+    background: #6b4dc9;
+}
+
+/* ===== Music Player ===== */
+.music-player {
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 60px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background: #ffffff;
-    border-top: 1px solid #cce0ff;
-}
-#bottom-navigation button {
-    background: none;
-    border: none;
-    color: #888;
-    font-size: 14px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-#bottom-navigation button.active,
-#bottom-navigation button:hover {
-    color: #3399ff;
-}
-
-/* ===========================================
-   HOME SCREEN
-=========================================== */
-.home-core {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 70%;
-}
-#echo-orb-main {
-    width: 120px;
-    height: 120px;
-    background: linear-gradient(135deg,#3399ff,#80bfff);
-    border-radius: 50%;
-    margin-bottom: 20px;
-    cursor: pointer;
-    box-shadow: 0 0 20px rgba(51,153,255,0.5);
-    transition: transform 0.2s;
-}
-#echo-orb-main:hover {
-    transform: scale(1.1);
-}
-.home-hint {
-    font-size: 14px;
-    color: #555;
-    margin-top: 10px;
-}
-.home-actions {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 30px;
-}
-.home-actions button {
-    background: #e6f0ff;
-    color: #0b0f1a;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.home-actions button:hover {
-    background: #cce0ff;
-}
-
-/* ===========================================
-   EXPLORE SCREEN
-=========================================== */
-.explore-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
-    gap: 15px;
-    padding-top: 15px;
-}
-.explore-card {
-    background: #e6f0ff;
-    color: #0b0f1a;
-    border-radius: 14px;
-    padding: 20px;
     text-align: center;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s, background 0.2s;
-}
-.explore-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 25px rgba(0,100,255,0.3);
-    background: #cce0ff;
-}
-
-/* ===========================================
-   PROFILE SCREEN
-=========================================== */
-.profile-core {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 30px;
-}
-.profile-avatar {
-    width: 100px;
-    height: 100px;
-    background: #cce0ff;
-    border-radius: 50%;
-    margin-bottom: 15px;
-    box-shadow: 0 5px 15px rgba(0,100,255,0.3);
-}
-.profile-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 20px;
-}
-.profile-actions button {
-    background: #e6f0ff;
-    color: #0b0f1a;
-    border: none;
-    padding: 10px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-}
-.profile-actions button:hover {
-    background: #cce0ff;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,100,255,0.2);
-}
-
-/* ===========================================
-   SETTINGS SCREEN
-=========================================== */
-.settings-list {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    padding-top: 10px;
-}
-.setting-item {
-    display: flex;
-    justify-content: space-between;
-    background: #e6f0ff;
-    padding: 14px 16px;
-    border-radius: 12px;
-    color: #0b0f1a;
-    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-}
-.setting-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,100,255,0.2);
-    background: #cce0ff;
-}
-.setting-item button {
-    width: 45px;
-    height: 28px;
-    border-radius: 14px;
-    border: none;
-    background: #b3d1ff;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
-}
-.setting-item button:hover {
-    background: #80bfff;
-    transform: translateY(-1px);
-}
-
-/* ===========================================
-   CHAT SCREEN
-=========================================== */
-#chat-log {
-    background: #f0f7ff;
-    color: #0b0f1a;
     padding: 12px;
-    border-radius: 14px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.message.user {
-    background: #3399ff;
+    background: rgba(0,0,0,0.7);
     color: #fff;
-}
-.message.echo {
-    background: #cce0ff;
-    color: #0b0f1a;
-}
-.message {
-    opacity: 0;
-    transform: translateX(20px);
-    animation: message-slide 0.25s forwards;
-}
-@keyframes message-slide {
-    to { opacity: 1; transform: translateX(0); }
-}
-.chat-input-bar {
-    display: flex;
-    padding: 10px;
-    gap: 10px;
-    background: #ffffff;
-    border-top: 1px solid #cce0ff;
-}
-.chat-input-bar input {
-    flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #cce0ff;
-    background: #f7f9ff;
-    color: #0b0f1a;
-}
-.chat-input-bar button {
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: none;
-    background: #3399ff;
-    cursor: pointer;
-    color: #fff;
-    font-weight: bold;
+    font-size: 1rem;
 }
 
-/* ===========================================
-   VOICE OVERLAY
-=========================================== */
-#voice-overlay {
+.music-player audio {
+    width: 90%;
+    border-radius: 10px;
+    outline: none;
+}
+
+/* ===== AI Orb ===== */
+#aiOrb {
     position: fixed;
-    top:0; left:0; right:0; bottom:0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: rgba(230,240,255,0.95);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-}
-#voice-overlay.active {
-    opacity: 1;
-    pointer-events: auto;
-}
-.voice-orb {
-    width: 100px;
-    height: 100px;
-    background: linear-gradient(135deg,#3399ff,#80bfff);
+    bottom: 150px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    margin-bottom: 20px;
-    box-shadow: 0 0 25px rgba(0,100,255,0.5);
-    animation: pulse 1.5s infinite;
-}
-.voice-status {
-    font-size: 18px;
-    color: #0b0f1a;
-}
-@keyframes pulse {
-    0%,100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-}
-
-/* ===========================================
-   BOOT SCREEN
-=========================================== */
-#screen-boot {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
-#boot-orb {
-    width: 100px;
-    height: 100px;
-    background: linear-gradient(135deg,#3399ff,#80bfff);
-    border-radius: 50%;
-    margin-bottom: 20px;
-    box-shadow: 0 0 20px rgba(51,153,255,0.5);
-    animation: spin 3s linear infinite;
-}
-@keyframes spin { 0%{transform:rotate(0deg);}100%{transform:rotate(360deg);} }
-#boot-loader {
-    width: 80%;
-    height: 10px;
-    background: #e6f0ff;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-top: 20px;
-}
-.boot-progress {
-    width: 0;
-    height: 100%;
-    background: #3399ff;
-    border-radius: 5px;
-    transition: width 0.1s;
-}
-
-/* ===========================================
-   RECOVERY SCREEN
-=========================================== */
-#screen-recovery {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    background: rgba(230,240,255,0.95);
-    height: 100%;
-    padding: 20px;
-}
-#screen-recovery button {
-    margin-top: 20px;
-    background: #3399ff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 12px;
+    background: radial-gradient(circle, #7f5af0, #4ade80);
+    box-shadow: 0 0 30px #7f5af0;
+    animation: pulse 2s infinite;
     cursor: pointer;
-    color: #fff;
-    font-weight: bold;
+    transition: background 0.5s ease, transform 0.5s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow:0 0 20px #7f5af0; }
+    50% { transform: scale(1.2); box-shadow:0 0 40px #4ade80; }
+    100% { transform: scale(1); box-shadow:0 0 20px #7f5af0; }
+}
+
+/* ===== Floating Decorative Orbs ===== */
+.floating-orb {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ff00ff, #00ffff);
+    animation: float 10s infinite alternate;
+    opacity: 0.6;
+}
+
+@keyframes float {
+    0% { transform: translateY(0) translateX(0); }
+    100% { transform: translateY(-100px) translateX(50px); }
+}
+
+/* ===== Scrollbar Styling ===== */
+#messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+#messages::-webkit-scrollbar-thumb {
+    background-color: #7f5af0;
+    border-radius: 3px;
+}
+
+#messages::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+}
+
+/* ===== Responsive ===== */
+@media screen and (max-width:600px){
+    .chat-container { width: 95%; bottom: 80px; }
+    #aiOrb { width: 50px; height: 50px; bottom: 120px; }
 }
