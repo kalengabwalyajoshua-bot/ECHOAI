@@ -105,3 +105,14 @@ footer {
   50% { box-shadow: 0 0 25px var(--accent), 0 0 50px var(--accent-soft); transform: scale(1.05); }
   100% { box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent-soft); transform: scale(1); }
 }
+/* GLOW + EXPAND EFFECT */
+.glow {
+  animation: pulse 1s infinite;
+  box-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent-soft);
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent-soft); transform: scale(1); }
+  50% { box-shadow: 0 0 25px var(--accent), 0 0 50px var(--accent-soft); transform: scale(1.1); }
+  100% { box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent-soft); transform: scale(1); }
+}
