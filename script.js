@@ -1,12 +1,13 @@
 // ============================
-// EchoAI JavaScript
+// EchoAI Fully Functional JS
 // ============================
 
 // ----------------------------
 // Screen Navigation
 // ----------------------------
-const screens = document.querySelectorAll('.screen');
+const screens = document.querySelectorAll('#screen-wrapper .screen');
 const backBtns = document.querySelectorAll('.back-btn');
+const featureBtns = document.querySelectorAll('.feature-btn');
 
 function showScreen(screenId) {
   screens.forEach(screen => screen.classList.remove('active'));
@@ -23,7 +24,6 @@ backBtns.forEach(btn => {
 });
 
 // Quick Access Buttons
-const featureBtns = document.querySelectorAll('.feature-btn');
 featureBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     const screenId = btn.getAttribute('data-screen');
@@ -84,7 +84,7 @@ function showAIThought(text) {
 }
 
 // ----------------------------
-// Voice Commands Simulation
+// Voice Commands
 // ----------------------------
 const voiceBtn = document.getElementById('voice-btn');
 const voiceInput = document.getElementById('voice-search');
@@ -163,7 +163,10 @@ easterEgg.addEventListener('click', () => {
 });
 
 // ----------------------------
-// Initial Setup
+// Initialize App
 // ----------------------------
-showScreen('home-screen');
-updateTime();
+document.addEventListener('DOMContentLoaded', () => {
+  showScreen('home-screen');
+  voiceResponse.textContent = 'Welcome to EchoAI! Say something or press 🎤';
+  updateTime();
+});
