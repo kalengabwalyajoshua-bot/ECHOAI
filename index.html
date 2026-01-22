@@ -1,226 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EchoAI – Futuristic Empathy Engine</title>
-<link rel="stylesheet" href="style.css">
-<script src="script.js" defer></script>
-<style>
-  /* ====== Futuristic Design Styles ====== */
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Orbitron', sans-serif;
-    background: radial-gradient(circle at 30% 30%, #0c0c1e, #1a1a2e, #0f0c29);
-    color: #e0e0ff;
-    overflow: hidden;
-  }
-
-  /* --- Glowing Home Screen --- */
-  #home-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    text-align: center;
-    animation: screenFadeIn 1.5s ease-in-out;
-  }
-
-  .app-icon-glow {
-    width: 120px;
-    height: 120px;
-    margin-bottom: 20px;
-    border-radius: 50%;
-    background: radial-gradient(circle, #6a0dad 0%, #2e0d4f 70%);
-    box-shadow: 0 0 30px #8a2be2, 0 0 60px #6a0dad;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.4s ease-in-out;
-  }
-
-  .app-icon-glow:hover {
-    transform: scale(1.15) rotate(10deg);
-  }
-
-  .app-icon {
-    width: 70%;
-    height: 70%;
-  }
-
-  h1 {
-    font-size: 3rem;
-    letter-spacing: 2px;
-    text-shadow: 0 0 20px #8a2be2, 0 0 40px #6a0dad;
-    margin-bottom: 10px;
-  }
-
-  p {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    text-shadow: 0 0 10px #6a0dad;
-  }
-
-  .voice-button {
-    font-size: 1.3rem;
-    padding: 15px 30px;
-    border-radius: 25px;
-    background: linear-gradient(45deg, #6a0dad, #8a2be2);
-    box-shadow: 0 0 20px #6a0dad, 0 0 40px #8a2be2;
-    transition: 0.4s;
-  }
-
-  .voice-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 30px #8a2be2, 0 0 60px #6a0dad;
-  }
-
-  #response-container {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 15px;
-    background: rgba(20, 10, 40, 0.6);
-    box-shadow: 0 0 20px #8a2be2 inset;
-    min-width: 300px;
-    max-width: 600px;
-    text-align: center;
-    font-size: 1.1rem;
-  }
-
-  /* --- Stories Section --- */
-  .hidden-screen {
-    display: none;
-  }
-
-  #story-music-screen {
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(20, 10, 40, 0.7);
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 0 30px #6a0dad, 0 0 60px #8a2be2 inset;
-    width: 90%;
-    max-width: 800px;
-    text-align: center;
-  }
-
-  #story-container {
-    margin-bottom: 15px;
-    padding: 15px;
-    border-radius: 15px;
-    background: rgba(10, 5, 30, 0.6);
-    min-height: 120px;
-    font-size: 1.2rem;
-  }
-
-  .story-btn {
-    background: linear-gradient(45deg, #00ffff, #0ff);
-    box-shadow: 0 0 20px #0ff, 0 0 40px #00ffff;
-    color: #000;
-    font-weight: bold;
-    transition: 0.3s;
-  }
-
-  .story-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 30px #00ffff, 0 0 60px #0ff;
-  }
-
-  /* --- Control Panel --- */
-  #control-panel {
-    position: absolute;
-    bottom: 5%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(15, 10, 35, 0.8);
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 0 30px #8a2be2;
-    text-align: center;
-  }
-
-  .control-buttons button {
-    margin: 8px;
-  }
-
-  /* --- Voice Status --- */
-  .status-glow {
-    position: fixed;
-    top: 5%;
-    right: 5%;
-    padding: 10px 20px;
-    border-radius: 20px;
-    background: rgba(20, 10, 40, 0.8);
-    box-shadow: 0 0 20px #6a0dad, 0 0 40px #8a2be2 inset;
-    font-weight: bold;
-  }
-
-  /* --- Canvas Glowing Effects --- */
-  #glow-effects-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
-  }
-
-  /* --- Animations --- */
-  @keyframes screenFadeIn {
-    0% { opacity: 0; transform: scale(0.95); }
-    100% { opacity: 1; transform: scale(1); }
-  }
-
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EchoAI</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <!-- Glowing Home Screen -->
-  <div id="home-screen" class="glow-container">
-    <div class="app-icon-glow">
-      <img src="echo_icon.png" alt="EchoAI" class="app-icon">
+  <!-- Animated Background Container -->
+  <div id="animated-background">
+    <canvas id="bg-canvas"></canvas>
+  </div>
+
+  <!-- Main App Container -->
+  <div id="app" class="futuristic-app">
+
+    <!-- Screen Transition Wrapper -->
+    <div id="screen-wrapper">
+      <!-- Home Screen -->
+      <section id="home-screen" class="screen active">
+        <div class="home-header">
+          <h1>EchoAI</h1>
+          <p class="subtitle">Your futuristic AI companion</p>
+        </div>
+        <div class="voice-search-container">
+          <input type="text" id="voice-search" placeholder="Ask me anything..." />
+          <button id="voice-btn">🎤</button>
+        </div>
+        <div class="quick-access">
+          <button class="feature-btn" data-screen="video-analyzer">📹 Video Analyzer</button>
+          <button class="feature-btn" data-screen="settings">⚙️ Settings</button>
+          <button class="feature-btn" data-screen="notifications">🔔 Notifications</button>
+        </div>
+      </section>
+
+      <!-- Voice Interaction Screen -->
+      <section id="voice-screen" class="screen">
+        <div class="voice-header">
+          <h2>Listening...</h2>
+          <div id="voice-indicator" class="glow-circle"></div>
+        </div>
+        <div class="voice-log">
+          <p id="voice-response">Say something and I’ll respond...</p>
+        </div>
+        <button class="back-btn" data-screen="home-screen">← Back</button>
+      </section>
+
+      <!-- Video Analyzer Screen -->
+      <section id="video-analyzer" class="screen">
+        <div class="analyzer-header">
+          <h2>Video Analyzer</h2>
+          <video id="camera-feed" autoplay></video>
+        </div>
+        <div class="analyzer-output">
+          <p id="analysis-result">Analysis will appear here...</p>
+        </div>
+        <div id="video-controls" class="video-controls">
+          <button id="start-analysis">▶ Start Analysis</button>
+          <button id="stop-analysis">⏹ Stop Analysis</button>
+          <button id="snapshot">📸 Snapshot</button>
+        </div>
+        <button class="back-btn" data-screen="home-screen">← Back</button>
+      </section>
+
+      <!-- Settings Screen -->
+      <section id="settings" class="screen">
+        <h2>Settings</h2>
+        <div class="settings-options">
+          <label>
+            Voice Type:
+            <select id="voice-type">
+              <option value="friendly">Friendly</option>
+              <option value="formal">Formal</option>
+              <option value="funny">Funny</option>
+            </select>
+          </label>
+          <label>
+            Theme:
+            <select id="theme-select">
+              <option value="futuristic">Futuristic</option>
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+            </select>
+          </label>
+          <label>
+            Notifications:
+            <input type="checkbox" id="notifications-toggle" checked />
+          </label>
+        </div>
+        <button class="back-btn" data-screen="home-screen">← Back</button>
+      </section>
+
+      <!-- Notifications Screen -->
+      <section id="notifications" class="screen">
+        <h2>Notifications</h2>
+        <ul id="notification-list">
+          <li>No new notifications</li>
+        </ul>
+        <button class="back-btn" data-screen="home-screen">← Back</button>
+      </section>
+
+      <!-- Response Cards (for AI/voice replies) -->
+      <div id="response-cards" class="response-container"></div>
+
+      <!-- Loading / thinking animation -->
+      <div id="ai-loading" class="glow-dots hidden">
+        <span></span><span></span><span></span>
+      </div>
+
+      <!-- Hidden Advanced Settings -->
+      <section id="advanced-settings" class="screen hidden">
+        <h2>Advanced Settings</h2>
+        <label>
+          Debug Mode:
+          <input type="checkbox" id="debug-toggle" />
+        </label>
+        <label>
+          Voice Sensitivity:
+          <input type="range" id="voice-sensitivity" min="1" max="10" value="5"/>
+        </label>
+        <button class="back-btn" data-screen="settings">← Back</button>
+      </section>
+
+      <!-- Voice Command History -->
+      <div id="voice-history" class="hidden">
+        <h3>Recent Commands</h3>
+        <ul id="history-list">
+          <li>No commands yet</li>
+        </ul>
+      </div>
+
+      <!-- Video Analyzer Settings -->
+      <div id="video-settings" class="hidden">
+        <h3>Camera Settings</h3>
+        <label>
+          Camera:
+          <select id="camera-select">
+            <option value="front">Front</option>
+            <option value="rear">Rear</option>
+          </select>
+        </label>
+        <label>
+          Resolution:
+          <select id="resolution-select">
+            <option value="720p">720p</option>
+            <option value="1080p">1080p</option>
+            <option value="4k">4K</option>
+          </select>
+        </label>
+        <label>
+          Analysis Type:
+          <select id="analysis-type">
+            <option value="general">General</option>
+            <option value="detailed">Detailed</option>
+          </select>
+        </label>
+      </div>
+
+      <!-- Expandable Help Panel -->
+      <div id="help-panel" class="hidden">
+        <h3>EchoAI Help</h3>
+        <p>Click on any button to see what it does. Use voice commands by pressing 🎤.</p>
+      </div>
+
+      <!-- Achievements / Easter Eggs Panel -->
+      <div id="achievements-panel" class="hidden">
+        <h3>Achievements</h3>
+        <ul id="achievements-list">
+          <li>Welcome to EchoAI! 🌟</li>
+        </ul>
+      </div>
+
+      <!-- Theme Indicator -->
+      <div id="theme-indicator" class="hidden">
+        <span id="current-theme">Futuristic Mode</span>
+      </div>
+    </div> <!-- end of screen-wrapper -->
+
+    <!-- Floating Action Buttons -->
+    <div id="fab-container">
+      <button id="fab-advanced" title="Advanced Settings">⚡</button>
+      <button id="fab-help" title="Help & Tips">❓</button>
     </div>
-    <h1>EchoAI</h1>
-    <p>Your Futuristic Empathy Engine</p>
-    <button id="voice-btn" class="voice-button">🎤 Talk to EchoAI</button>
-    <div id="response-container" class="response-glow"></div>
-  </div>
 
-  <!-- Stories & Music Section -->
-  <div id="story-music-screen" class="hidden-screen">
-    <h2>Bedtime Stories & Music</h2>
-    <div id="story-container">
-      <p id="story-text">Press "Start Story" to begin your adventure.</p>
+    <!-- Tooltips / Mini Popups -->
+    <div id="tooltip" class="hidden">
+      <p id="tooltip-text">This is a tooltip</p>
     </div>
-    <button id="start-story" class="story-btn">Start Story</button>
-    <button id="stop-story" class="story-btn">Stop Story</button>
-    <audio id="story-music" loop></audio>
-    <div id="sound-effects-container"></div>
-  </div>
 
-  <!-- Control & Settings Panel -->
-  <div id="control-panel" class="hidden-screen">
-    <h2>Phone & App Controls</h2>
-    <div class="control-buttons">
-      <button onclick="sendWhatsAppMessage()">Send WhatsApp Message</button>
-      <button onclick="toggleData()">Toggle Data</button>
-      <button onclick="makeCall()">Call Me</button>
-      <button onclick="stopAll()">Stop Everything</button>
+    <!-- Glow Notifications Panel -->
+    <div id="glow-notifications" class="hidden">
+      <p id="notification-text">New alert!</p>
     </div>
-  </div>
 
-  <!-- Hidden Background Audio -->
-  <div id="background-audio-container" class="hidden-screen">
-    <audio id="ambient-music" loop></audio>
-  </div>
+    <!-- AI Thought Bubble -->
+    <div id="ai-thought-bubble" class="hidden">
+      <p id="ai-thought-text">🤖 Thinking...</p>
+    </div>
 
-  <!-- Voice Recognition Status -->
-  <div id="voice-status" class="status-glow hidden-screen">
-    Listening...
-  </div>
+    <!-- Easter Egg Trigger -->
+    <button id="easter-egg-trigger" class="hidden">💎</button>
 
-  <!-- Dynamic Visual Effects -->
-  <canvas id="glow-effects-canvas"></canvas>
+    <!-- Footer / Status Bar -->
+    <footer id="status-bar">
+      <span id="status-mode">Idle</span>
+      <span id="status-time"></span>
+    </footer>
+
+  </div> <!-- end of app -->
 </body>
 </html>
