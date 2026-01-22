@@ -33,7 +33,9 @@ const responses = {
   voiceReply: [
     "I heard you clearly!",
     "Got it, processing...",
-    "Thanks for speaking, I’m ready to respond."
+    "Thanks for speaking, I’m ready to respond.",
+    "Interesting, tell me more!",
+    "Okay, I understand."
   ]
 };
 
@@ -45,7 +47,6 @@ function randomFrom(list) {
   do {
     choice = list[Math.floor(Math.random() * list.length)];
   } while (choice === appState.lastResponse);
-
   appState.lastResponse = choice;
   return choice;
 }
@@ -68,7 +69,7 @@ function showHelp() {
 }
 
 /* =========================
-   VOICE RECOGNITION + SPEECH
+   VOICE + GLOW + SPEECH
 ========================= */
 let recognition;
 function startVoice() {
@@ -85,6 +86,7 @@ function startVoice() {
 
   recognition.start();
 
+  // Glow + expand effect
   powerBtn.classList.add("glow");
   setStatus("Listening...");
   screenEl.innerHTML = `<p>${randomFrom(responses.active)}</p>`;
@@ -93,11 +95,13 @@ function startVoice() {
     const transcript = event.results[0][0].transcript;
     const reply = randomFrom(responses.voiceReply);
 
+    // Show transcript + reply
     screenEl.innerHTML = `
       <p>🗣 You said: "${transcript}"</p>
       <p>${reply}</p>
     `;
 
+    // Speak the reply
     const synth = window.speechSynthesis;
     const utter = new SpeechSynthesisUtterance(reply);
     utter.lang = 'en-US';
@@ -133,6 +137,7 @@ sendBtn.addEventListener("click", () => {
   if (msg === "") return;
 
   const reply = randomFrom(responses.voiceReply);
+
   screenEl.innerHTML = `
     <p>📝 You typed: "${msg}"</p>
     <p>${reply}</p>
