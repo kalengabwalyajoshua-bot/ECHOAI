@@ -5,242 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EchoAI</title>
 
-  <!-- =========================
-       GLOBAL STYLES
-  ========================== -->
-  <style>
-    :root {
-      --bg-main: #05070d;
-      --bg-soft: #0b1220;
-      --accent: #00fff0;
-      --accent-soft: rgba(0, 255, 240, 0.15);
-      --text-main: #e8faff;
-      --text-dim: #9fdedd;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background: radial-gradient(circle at top, var(--bg-soft), var(--bg-main));
-      color: var(--text-main);
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    /* =========================
-       HEADER
-    ========================== */
-    header {
-      padding: 16px;
-      text-align: center;
-      font-size: 1.2rem;
-      letter-spacing: 1px;
-      color: var(--accent);
-    }
-
-    /* =========================
-       MAIN CONTENT
-    ========================== */
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 24px;
-      text-align: center;
-    }
-
-    #screen {
-      max-width: 420px;
-      line-height: 1.6;
-      opacity: 0.95;
-    }
-
-    #screen h2 {
-      margin-bottom: 12px;
-      font-weight: normal;
-    }
-
-    #screen p {
-      color: var(--text-dim);
-      margin-bottom: 10px;
-    }
-
-    /* =========================
-       FLOATING CONTROLS
-    ========================== */
-    #controls {
-      position: fixed;
-      right: 20px;
-      bottom: 90px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      z-index: 10;
-    }
-
-    .btn {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: none;
-      font-size: 26px;
-      cursor: pointer;
-      background: var(--accent);
-      color: #000;
-      box-shadow: 0 0 22px var(--accent);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .btn:active {
-      transform: scale(0.9);
-      box-shadow: 0 0 12px var(--accent);
-    }
-
-    /* =========================
-       STATUS BAR
-    ========================== */
-    footer {
-      width: 100%;
-      padding: 12px;
-      text-align: center;
-      background: var(--accent-soft);
-      font-size: 14px;
-      letter-spacing: 1px;
-      color: var(--accent);
-    }
-
-    /* =========================
-       HIDDEN (FOR FUTURE)
-    ========================== */
-    .hidden {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-  <!-- =========================
-       HEADER
-  ========================== -->
-  <header>
-    EchoAI
-  </header>
+  <header>EchoAI</header>
 
-  <!-- =========================
-       MAIN SCREEN
-  ========================== -->
   <main>
-    <div id="screen">
-      <h2>👋 Welcome</h2>
-      <p>This is <b>EchoAI</b>, your intelligent assistant.</p>
-      <p>Tap the ⚡ button to activate.</p>
-    </div>
+    <div id="screen"></div>
   </main>
 
-  <!-- =========================
-       CONTROLS
-  ========================== -->
   <div id="controls">
-    <button class="btn" id="powerBtn" title="Activate">⚡</button>
-    <button class="btn" id="helpBtn" title="Help">❓</button>
+    <button class="btn" id="powerBtn">⚡</button>
+    <button class="btn" id="helpBtn">❓</button>
   </div>
 
-  <!-- =========================
-       STATUS BAR
-  ========================== -->
   <footer>
     Status: <span id="status">Idle</span>
   </footer>
 
-  <!-- =========================
-       APPLICATION LOGIC
-  ========================== -->
-  <script>
-    /* -------------------------
-       STATE
-    ------------------------- */
-    let appState = {
-      status: "Idle",
-      active: false
-    };
-
-    /* -------------------------
-       ELEMENTS
-    ------------------------- */
-    const statusEl = document.getElementById("status");
-    const screenEl = document.getElementById("screen");
-    const powerBtn = document.getElementById("powerBtn");
-    const helpBtn = document.getElementById("helpBtn");
-
-    /* -------------------------
-       CORE FUNCTIONS
-    ------------------------- */
-    function setStatus(text) {
-      appState.status = text;
-      statusEl.innerText = text;
-    }
-
-    function showWelcome() {
-      screenEl.innerHTML = `
-        <h2>👋 Welcome</h2>
-        <p>This is <b>EchoAI</b>, your intelligent assistant.</p>
-        <p>Tap the ⚡ button to activate.</p>
-      `;
-    }
-
-    function activateEchoAI() {
-      appState.active = true;
-      setStatus("Listening");
-
-      screenEl.innerHTML = `
-        <h2>🎧 EchoAI Active</h2>
-        <p>I am now listening and ready to help you.</p>
-        <p>More intelligence and features will be added soon.</p>
-      `;
-    }
-
-    function showHelp() {
-      setStatus("Help");
-
-      screenEl.innerHTML = `
-        <h2>ℹ️ Help</h2>
-        <p>⚡ Activate EchoAI</p>
-        <p>❓ View instructions</p>
-        <p>This is the foundation version of EchoAI.</p>
-      `;
-    }
-
-    /* -------------------------
-       EVENTS
-    ------------------------- */
-    powerBtn.addEventListener("click", () => {
-      if (!appState.active) {
-        activateEchoAI();
-      } else {
-        setStatus("Active");
-      }
-    });
-
-    helpBtn.addEventListener("click", showHelp);
-
-    /* -------------------------
-       INIT
-    ------------------------- */
-    window.onload = () => {
-      setStatus("Idle");
-      showWelcome();
-    };
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
