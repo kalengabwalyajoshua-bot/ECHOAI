@@ -1,168 +1,311 @@
-/* ===================== EchoAI Futuristic Style.css ===================== */
-
-/* --- Reset & Fonts --- */
+/* ===========================
+   Reset & Global Styles
+=========================== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-body {
-  background: radial-gradient(circle at 30% 30%, #0c0c1e, #1a1a2e, #0f0c29);
-  color: #e0e0ff;
-  overflow-x: hidden;
-}
-
-/* --- Headings --- */
-h1, h2, p {
-  text-shadow: 0 0 20px #8a2be2, 0 0 40px #6a0dad;
-}
-
-h1 { font-size: 3rem; letter-spacing: 2px; margin-bottom: 10px; }
-h2 { font-size: 2rem; margin-bottom: 15px; }
-p { font-size: 1.2rem; margin-bottom: 20px; }
-
-/* --- Buttons --- */
-button {
-  cursor: pointer;
-  border: none;
-  border-radius: 20px;
-  padding: 15px 30px;
-  margin: 10px;
-  font-size: 1.1rem;
-  font-weight: bold;
+body, html {
+  width: 100%;
+  height: 100%;
+  background: #0a0f1a;
   color: #fff;
-  background: linear-gradient(45deg, #6a0dad, #8a2be2);
-  box-shadow: 0 0 20px #6a0dad, 0 0 40px #8a2be2;
-  transition: 0.4s;
+  overflow: hidden;
+  position: relative;
 }
 
-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 40px #8a2be2, 0 0 80px #6a0dad;
-}
-
-/* --- Home Screen --- */
-#home-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
-  animation: screenFadeIn 1.5s ease-in-out;
-}
-
-.app-icon-glow {
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #6a0dad 0%, #2e0d4f 70%);
-  box-shadow: 0 0 40px #8a2be2, 0 0 80px #6a0dad;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.5s ease-in-out;
-  margin-bottom: 20px;
-}
-
-.app-icon-glow:hover { transform: scale(1.2) rotate(15deg); }
-
-.app-icon { width: 70%; height: 70%; }
-
-/* --- Response Container --- */
-#response-container {
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 15px;
-  background: rgba(20, 10, 40, 0.7);
-  box-shadow: 0 0 30px #8a2be2 inset;
-  min-width: 300px;
-  max-width: 600px;
-  text-align: center;
-  font-size: 1.1rem;
-  transition: 0.4s;
-}
-
-/* --- Stories Section --- */
-#story-music-screen {
-  position: absolute;
-  top: 5%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(20, 10, 40, 0.75);
-  padding: 25px;
-  border-radius: 25px;
-  box-shadow: 0 0 40px #6a0dad, 0 0 80px #8a2be2 inset;
-  width: 90%;
-  max-width: 1000px;
-  text-align: center;
-}
-
-#story-container {
-  margin-bottom: 20px;
-  padding: 20px;
-  border-radius: 15px;
-  background: rgba(10, 5, 30, 0.6);
-  min-height: 150px;
-  font-size: 1.25rem;
-  box-shadow: 0 0 25px #0ff inset;
-}
-
-/* Story Buttons */
-.story-btn {
-  background: linear-gradient(45deg, #00ffff, #0ff);
-  color: #000;
-  font-weight: bold;
-  transition: 0.3s;
-  box-shadow: 0 0 25px #00ffff, 0 0 50px #0ff;
-}
-
-.story-btn:hover {
-  transform: scale(1.12);
-  box-shadow: 0 0 50px #00ffff, 0 0 100px #0ff;
-}
-
-/* --- Voice Status --- */
-.status-glow {
-  position: fixed;
-  top: 5%;
-  right: 5%;
-  padding: 12px 25px;
-  border-radius: 25px;
-  background: rgba(20, 10, 40, 0.85);
-  box-shadow: 0 0 25px #6a0dad, 0 0 50px #8a2be2 inset;
-  font-weight: bold;
-  animation: pulseGlow 2s infinite;
-}
-
-/* --- Canvas Effects --- */
-#glow-effects-canvas {
+/* ===========================
+   Animated Background
+=========================== */
+#animated-background {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: -1;
   width: 100%;
   height: 100%;
+  z-index: -2;
+  background: linear-gradient(135deg, #0a0f1a, #1b1f2a, #0a0f1a);
 }
 
-/* --- Animations --- */
-@keyframes screenFadeIn {
-  0% { opacity: 0; transform: scale(0.95); }
-  100% { opacity: 1; transform: scale(1); }
+#bg-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 20px #6a0dad, 0 0 40px #8a2be2 inset; }
-  50% { box-shadow: 0 0 40px #8a2be2, 0 0 80px #6a0dad inset; }
-  100% { box-shadow: 0 0 20px #6a0dad, 0 0 40px #8a2be2 inset; }
+/* ===========================
+   Screen Wrapper & Screens
+=========================== */
+#screen-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
-/* --- Responsive --- */
-@media screen and (max-width: 600px) {
-  h1 { font-size: 2rem; }
-  h2 { font-size: 1.5rem; }
-  #story-container { font-size: 1rem; }
-  button { font-size: 1rem; padding: 10px 20px; }
+.screen {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background: rgba(10,15,26,0.8);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  transition: all 0.5s ease-in-out;
+}
+
+.screen.active {
+  display: block;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+/* ===========================
+   Home Screen
+=========================== */
+.home-header h1 {
+  font-size: 2.5rem;
+  color: #00ffff;
+  text-shadow: 0 0 10px #00ffff;
+}
+
+.home-header .subtitle {
+  font-size: 1rem;
+  color: #88f;
+  margin-top: 5px;
+}
+
+.voice-search-container {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+}
+
+.voice-search-container input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 12px 0 0 12px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 1rem;
+}
+
+.voice-search-container button {
+  padding: 10px 20px;
+  border-radius: 0 12px 12px 0;
+  border: none;
+  background: #00ffff;
+  color: #000;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.voice-search-container button:hover {
+  box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff;
+}
+
+/* ===========================
+   Quick Access Buttons
+=========================== */
+.quick-access {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.feature-btn {
+  flex: 1;
+  padding: 15px;
+  background: rgba(0,255,255,0.2);
+  color: #00ffff;
+  border: 1px solid #00ffff;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.feature-btn:hover {
+  background: rgba(0,255,255,0.4);
+  box-shadow: 0 0 20px #00ffff;
+}
+
+/* ===========================
+   Voice Screen
+=========================== */
+.glow-circle {
+  width: 50px;
+  height: 50px;
+  background: #00ffff;
+  border-radius: 50%;
+  margin-top: 10px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {transform: scale(1); opacity: 0.7;}
+  50% {transform: scale(1.3); opacity: 1;}
+  100% {transform: scale(1); opacity: 0.7;}
+}
+
+/* ===========================
+   Response Cards
+=========================== */
+.response-container {
+  position: absolute;
+  bottom: 100px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.response-card {
+  background: rgba(0,255,255,0.2);
+  padding: 15px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  animation: slideUp 0.5s ease forwards;
+}
+
+@keyframes slideUp {
+  from {transform: translateY(20px); opacity: 0;}
+  to {transform: translateY(0); opacity: 1;}
+}
+
+/* ===========================
+   Loading / AI Thinking
+=========================== */
+.glow-dots {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.glow-dots span {
+  width: 12px;
+  height: 12px;
+  background: #00ffff;
+  border-radius: 50%;
+  animation: bounce 1.2s infinite;
+}
+
+.glow-dots span:nth-child(2) {animation-delay: 0.2s;}
+.glow-dots span:nth-child(3) {animation-delay: 0.4s;}
+
+@keyframes bounce {
+  0%, 80%, 100% {transform: scale(0);}
+  40% {transform: scale(1);}
+}
+
+/* ===========================
+   FABs
+=========================== */
+#fab-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10;
+}
+
+#fab-container button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: #00ffff;
+  color: #000;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 0 15px #00ffff;
+  transition: all 0.3s ease;
+}
+
+#fab-container button:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 25px #00ffff, 0 0 50px #00ffff;
+}
+
+/* ===========================
+   Tooltip & Notifications
+=========================== */
+#tooltip, #glow-notifications {
+  position: fixed;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,255,255,0.2);
+  padding: 10px 20px;
+  border-radius: 12px;
+  color: #fff;
+  backdrop-filter: blur(10px);
+  text-align: center;
+  font-size: 0.9rem;
+  box-shadow: 0 0 20px #00ffff;
+  z-index: 20;
+}
+
+.hidden {display: none;}
+
+/* ===========================
+   AI Thought Bubble
+=========================== */
+#ai-thought-bubble {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,255,255,0.15);
+  padding: 15px 25px;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  color: #00ffff;
+  font-size: 1rem;
+  text-align: center;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* ===========================
+   Footer / Status Bar
+=========================== */
+#status-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 8px 20px;
+  background: rgba(0,255,255,0.1);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #00ffff;
+}
+
+/* ===========================
+   Animations Helpers
+=========================== */
+@keyframes float {
+  0% {transform: translateY(0);}
+  50% {transform: translateY(-10px);}
+  100% {transform: translateY(0);}
 }
