@@ -52,6 +52,29 @@ function randomFrom(list) {
 }
 
 /* =========================
+   SPEECH FUNCTION
+========================= */
+function speak(text) {
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel(); // Stop any current speech
+  }
+
+  const synth = window.speechSynthesis;
+  const utter = new SpeechSynthesisUtterance(text);
+
+  // Pick a default English voice
+  const voices = synth.getVoices();
+  const enVoice = voices.find(v => v.lang.startsWith("en")) || voices[0];
+  if(enVoice) utter.voice = enVoice;
+
+  utter.lang = 'en-US';
+  utter.rate = 1;
+  utter.pitch = 1;
+
+  synth.speak(utter);
+}
+
+/* =========================
    CORE FUNCTIONS
 ========================= */
 function setStatus(text) {
@@ -69,7 +92,7 @@ function showHelp() {
 }
 
 /* =========================
-   VOICE + GLOW + SPEECH
+   VOICE RECOGNITION + GLOW
 ========================= */
 let recognition;
 function startVoice() {
@@ -95,17 +118,12 @@ function startVoice() {
     const transcript = event.results[0][0].transcript;
     const reply = randomFrom(responses.voiceReply);
 
-    // Show transcript + reply
     screenEl.innerHTML = `
       <p>🗣 You said: "${transcript}"</p>
       <p>${reply}</p>
     `;
 
-    // Speak the reply
-    const synth = window.speechSynthesis;
-    const utter = new SpeechSynthesisUtterance(reply);
-    utter.lang = 'en-US';
-    synth.speak(utter);
+    speak(reply); // Speak aloud
 
     setStatus("Active");
   };
@@ -143,10 +161,7 @@ sendBtn.addEventListener("click", () => {
     <p>${reply}</p>
   `;
 
-  const synth = window.speechSynthesis;
-  const utter = new SpeechSynthesisUtterance(reply);
-  utter.lang = 'en-US';
-  synth.speak(utter);
+  speak(reply); // Speak aloud
 
   userInput.value = "";
   setStatus("Active");
