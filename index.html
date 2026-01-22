@@ -5,9 +5,127 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EchoAI</title>
 
-  <link rel="stylesheet" href="style.css" />
-</head>
+  <style>
+    :root {
+      --bg-main: #05070d;
+      --bg-soft: #0b1220;
+      --accent: #00fff0;
+      --accent-soft: rgba(0, 255, 240, 0.15);
+      --text-main: #e8faff;
+      --text-dim: #9fdedd;
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(circle at top, var(--bg-soft), var(--bg-main));
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    header {
+      padding: 16px;
+      text-align: center;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      color: var(--accent);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    #screen {
+      max-width: 420px;
+      line-height: 1.6;
+      opacity: 0.95;
+    }
+
+    #screen h2 { margin-bottom: 12px; font-weight: normal; }
+    #screen p { color: var(--text-dim); margin-bottom: 10px; }
+
+    #controls {
+      position: fixed;
+      right: 20px;
+      bottom: 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 10;
+    }
+
+    .btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: none;
+      font-size: 26px;
+      cursor: pointer;
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 0 22px var(--accent);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn:active { transform: scale(0.9); box-shadow: 0 0 12px var(--accent); }
+
+    #inputArea {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 10px 20px;
+      gap: 10px;
+      position: fixed;
+      bottom: 50px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    #userInput {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 16px;
+    }
+
+    #sendBtn {
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: none;
+      background: var(--accent);
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    #sendBtn:active { transform: scale(0.95); }
+
+    footer {
+      width: 100%;
+      padding: 12px;
+      text-align: center;
+      background: var(--accent-soft);
+      font-size: 14px;
+      letter-spacing: 1px;
+      color: var(--accent);
+    }
+  </style>
+</head>
 <body>
 
   <header>EchoAI</header>
@@ -16,6 +134,13 @@
     <div id="screen"></div>
   </main>
 
+  <!-- MESSAGE INPUT -->
+  <div id="inputArea">
+    <input type="text" id="userInput" placeholder="Type your message here..." />
+    <button id="sendBtn">Send</button>
+  </div>
+
+  <!-- CONTROL BUTTONS -->
   <div id="controls">
     <button class="btn" id="powerBtn">⚡</button>
     <button class="btn" id="helpBtn">❓</button>
@@ -25,6 +150,109 @@
     Status: <span id="status">Idle</span>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    let appState = { status: "Idle", active: false, lastResponse: null };
+
+    const statusEl = document.getElementById("status");
+    const screenEl = document.getElementById("screen");
+    const powerBtn = document.getElementById("powerBtn");
+    const helpBtn = document.getElementById("helpBtn");
+    const userInput = document.getElementById("userInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    /* RESPONSE BANK */
+    const responses = {
+      welcome: [
+        "👋 Hello, I’m EchoAI. Tap ⚡ to begin.",
+        "Welcome. I’m here whenever you’re ready.",
+        "Hi there. Activate me when you need help."
+      ],
+      active: [
+        "🎧 I’m listening. What can I help you with?",
+        "Ready and active. Go ahead.",
+        "I’m here. Speak or tap anytime."
+      ],
+      help: [
+        "Use ⚡ to activate me.",
+        "I assist with information, guidance, and learning.",
+        "More features will unlock soon."
+      ],
+      voiceReply: [
+        "I heard you clearly!",
+        "Got it, processing...",
+        "Thanks for speaking, I’m ready to respond."
+      ]
+    };
+
+    function randomFrom(list) {
+      let choice;
+      do { choice = list[Math.floor(Math.random() * list.length)]; }
+      while(choice === appState.lastResponse);
+      appState.lastResponse = choice;
+      return choice;
+    }
+
+    function setStatus(text) { appState.status = text; statusEl.innerText = text; }
+
+    function showWelcome() { screenEl.innerHTML = `<p>${randomFrom(responses.welcome)}</p>`; }
+    function showHelp() { setStatus("Help"); screenEl.innerHTML = `<p>${randomFrom(responses.help)}</p>`; }
+
+    /* VOICE RECOGNITION */
+    let recognition;
+    function startVoice() {
+      if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+        alert("Your browser does not support voice recognition.");
+        return;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.start();
+      setStatus("Listening...");
+      screenEl.innerHTML = `<p>${randomFrom(responses.active)}</p>`;
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        screenEl.innerHTML = `
+          <p>🗣 You said: "${transcript}"</p>
+          <p>${randomFrom(responses.voiceReply)}</p>
+        `;
+        setStatus("Active");
+      };
+
+      recognition.onerror = (event) => {
+        screenEl.innerHTML = `<p>⚠️ Error occurred: ${event.error}</p>`;
+        setStatus("Idle");
+      };
+
+      recognition.onend = () => { if(appState.active) setStatus("Active"); else setStatus("Idle"); }
+    }
+
+    /* EVENTS */
+    powerBtn.addEventListener("click", () => {
+      appState.active = true;
+      startVoice();
+    });
+
+    helpBtn.addEventListener("click", showHelp);
+
+    sendBtn.addEventListener("click", () => {
+      const msg = userInput.value.trim();
+      if(msg === "") return;
+      screenEl.innerHTML = `
+        <p>📝 You typed: "${msg}"</p>
+        <p>${randomFrom(responses.voiceReply)}</p>
+      `;
+      userInput.value = "";
+      setStatus("Active");
+    });
+
+    window.onload = () => { setStatus("Idle"); showWelcome(); };
+  </script>
+
 </body>
 </html>
