@@ -8,6 +8,8 @@ const statusEl = document.getElementById("status");
 const screenEl = document.getElementById("screen");
 const powerBtn = document.getElementById("powerBtn");
 const helpBtn = document.getElementById("helpBtn");
+const userInput = document.getElementById("userInput");
+const sendBtn = document.getElementById("sendBtn");
 
 /* =========================
    RESPONSE BANK
@@ -27,6 +29,11 @@ const responses = {
     "Use ⚡ to activate me.",
     "I assist with information, guidance, and learning.",
     "More features will unlock soon."
+  ],
+  voiceReply: [
+    "I heard you clearly!",
+    "Got it, processing...",
+    "Thanks for speaking, I’m ready to respond."
   ]
 };
 
@@ -55,32 +62,90 @@ function showWelcome() {
   screenEl.innerHTML = `<p>${randomFrom(responses.welcome)}</p>`;
 }
 
-function activateEchoAI() {
-  appState.active = true;
-  setStatus("Listening");
-
-  screenEl.innerHTML = `<p>${randomFrom(responses.active)}</p>`;
-}
-
 function showHelp() {
   setStatus("Help");
-
   screenEl.innerHTML = `<p>${randomFrom(responses.help)}</p>`;
 }
 
 /* =========================
-   EVENTS
+   VOICE RECOGNITION + SPEECH
+========================= */
+let recognition;
+function startVoice() {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    alert("Your browser does not support voice recognition.");
+    return;
+  }
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.start();
+
+  powerBtn.classList.add("glow");
+  setStatus("Listening...");
+  screenEl.innerHTML = `<p>${randomFrom(responses.active)}</p>`;
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    const reply = randomFrom(responses.voiceReply);
+
+    screenEl.innerHTML = `
+      <p>🗣 You said: "${transcript}"</p>
+      <p>${reply}</p>
+    `;
+
+    const synth = window.speechSynthesis;
+    const utter = new SpeechSynthesisUtterance(reply);
+    utter.lang = 'en-US';
+    synth.speak(utter);
+
+    setStatus("Active");
+  };
+
+  recognition.onerror = (event) => {
+    screenEl.innerHTML = `<p>⚠️ Error occurred: ${event.error}</p>`;
+    setStatus("Idle");
+  };
+
+  recognition.onend = () => {
+    powerBtn.classList.remove("glow");
+    if (appState.active) setStatus("Active");
+    else setStatus("Idle");
+  };
+}
+
+/* =========================
+   EVENT LISTENERS
 ========================= */
 powerBtn.addEventListener("click", () => {
-  if (!appState.active) {
-    activateEchoAI();
-  } else {
-    setStatus("Active");
-    screenEl.innerHTML = `<p>${randomFrom(responses.active)}</p>`;
-  }
+  appState.active = true;
+  startVoice();
 });
 
 helpBtn.addEventListener("click", showHelp);
+
+sendBtn.addEventListener("click", () => {
+  const msg = userInput.value.trim();
+  if (msg === "") return;
+
+  const reply = randomFrom(responses.voiceReply);
+  screenEl.innerHTML = `
+    <p>📝 You typed: "${msg}"</p>
+    <p>${reply}</p>
+  `;
+
+  const synth = window.speechSynthesis;
+  const utter = new SpeechSynthesisUtterance(reply);
+  utter.lang = 'en-US';
+  synth.speak(utter);
+
+  userInput.value = "";
+  setStatus("Active");
+});
 
 /* =========================
    INIT
