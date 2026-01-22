@@ -1,213 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EchoAI</title>
-  <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
+
+  <!-- =========================
+       GLOBAL STYLES
+  ========================== -->
+  <style>
+    :root {
+      --bg-main: #05070d;
+      --bg-soft: #0b1220;
+      --accent: #00fff0;
+      --accent-soft: rgba(0, 255, 240, 0.15);
+      --text-main: #e8faff;
+      --text-dim: #9fdedd;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(circle at top, var(--bg-soft), var(--bg-main));
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* =========================
+       HEADER
+    ========================== */
+    header {
+      padding: 16px;
+      text-align: center;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      color: var(--accent);
+    }
+
+    /* =========================
+       MAIN CONTENT
+    ========================== */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    #screen {
+      max-width: 420px;
+      line-height: 1.6;
+      opacity: 0.95;
+    }
+
+    #screen h2 {
+      margin-bottom: 12px;
+      font-weight: normal;
+    }
+
+    #screen p {
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    /* =========================
+       FLOATING CONTROLS
+    ========================== */
+    #controls {
+      position: fixed;
+      right: 20px;
+      bottom: 90px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 10;
+    }
+
+    .btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: none;
+      font-size: 26px;
+      cursor: pointer;
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 0 22px var(--accent);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.9);
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    /* =========================
+       STATUS BAR
+    ========================== */
+    footer {
+      width: 100%;
+      padding: 12px;
+      text-align: center;
+      background: var(--accent-soft);
+      font-size: 14px;
+      letter-spacing: 1px;
+      color: var(--accent);
+    }
+
+    /* =========================
+       HIDDEN (FOR FUTURE)
+    ========================== */
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
-  <!-- Animated Background Container -->
-  <div id="animated-background">
-    <canvas id="bg-canvas"></canvas>
+
+  <!-- =========================
+       HEADER
+  ========================== -->
+  <header>
+    EchoAI
+  </header>
+
+  <!-- =========================
+       MAIN SCREEN
+  ========================== -->
+  <main>
+    <div id="screen">
+      <h2>👋 Welcome</h2>
+      <p>This is <b>EchoAI</b>, your intelligent assistant.</p>
+      <p>Tap the ⚡ button to activate.</p>
+    </div>
+  </main>
+
+  <!-- =========================
+       CONTROLS
+  ========================== -->
+  <div id="controls">
+    <button class="btn" id="powerBtn" title="Activate">⚡</button>
+    <button class="btn" id="helpBtn" title="Help">❓</button>
   </div>
 
-  <!-- Main App Container -->
-  <div id="app" class="futuristic-app">
+  <!-- =========================
+       STATUS BAR
+  ========================== -->
+  <footer>
+    Status: <span id="status">Idle</span>
+  </footer>
 
-    <!-- Screen Transition Wrapper -->
-    <div id="screen-wrapper">
-      <!-- Home Screen -->
-      <section id="home-screen" class="screen active">
-        <div class="home-header">
-          <h1>EchoAI</h1>
-          <p class="subtitle">Your futuristic AI companion</p>
-        </div>
-        <div class="voice-search-container">
-          <input type="text" id="voice-search" placeholder="Ask me anything..." />
-          <button id="voice-btn">🎤</button>
-        </div>
-        <div class="quick-access">
-          <button class="feature-btn" data-screen="video-analyzer">📹 Video Analyzer</button>
-          <button class="feature-btn" data-screen="settings">⚙️ Settings</button>
-          <button class="feature-btn" data-screen="notifications">🔔 Notifications</button>
-        </div>
-      </section>
+  <!-- =========================
+       APPLICATION LOGIC
+  ========================== -->
+  <script>
+    /* -------------------------
+       STATE
+    ------------------------- */
+    let appState = {
+      status: "Idle",
+      active: false
+    };
 
-      <!-- Voice Interaction Screen -->
-      <section id="voice-screen" class="screen">
-        <div class="voice-header">
-          <h2>Listening...</h2>
-          <div id="voice-indicator" class="glow-circle"></div>
-        </div>
-        <div class="voice-log">
-          <p id="voice-response">Say something and I’ll respond...</p>
-        </div>
-        <button class="back-btn" data-screen="home-screen">← Back</button>
-      </section>
+    /* -------------------------
+       ELEMENTS
+    ------------------------- */
+    const statusEl = document.getElementById("status");
+    const screenEl = document.getElementById("screen");
+    const powerBtn = document.getElementById("powerBtn");
+    const helpBtn = document.getElementById("helpBtn");
 
-      <!-- Video Analyzer Screen -->
-      <section id="video-analyzer" class="screen">
-        <div class="analyzer-header">
-          <h2>Video Analyzer</h2>
-          <video id="camera-feed" autoplay></video>
-        </div>
-        <div class="analyzer-output">
-          <p id="analysis-result">Analysis will appear here...</p>
-        </div>
-        <div id="video-controls" class="video-controls">
-          <button id="start-analysis">▶ Start Analysis</button>
-          <button id="stop-analysis">⏹ Stop Analysis</button>
-          <button id="snapshot">📸 Snapshot</button>
-        </div>
-        <button class="back-btn" data-screen="home-screen">← Back</button>
-      </section>
+    /* -------------------------
+       CORE FUNCTIONS
+    ------------------------- */
+    function setStatus(text) {
+      appState.status = text;
+      statusEl.innerText = text;
+    }
 
-      <!-- Settings Screen -->
-      <section id="settings" class="screen">
-        <h2>Settings</h2>
-        <div class="settings-options">
-          <label>
-            Voice Type:
-            <select id="voice-type">
-              <option value="friendly">Friendly</option>
-              <option value="formal">Formal</option>
-              <option value="funny">Funny</option>
-            </select>
-          </label>
-          <label>
-            Theme:
-            <select id="theme-select">
-              <option value="futuristic">Futuristic</option>
-              <option value="dark">Dark</option>
-              <option value="light">Light</option>
-            </select>
-          </label>
-          <label>
-            Notifications:
-            <input type="checkbox" id="notifications-toggle" checked />
-          </label>
-        </div>
-        <button class="back-btn" data-screen="home-screen">← Back</button>
-      </section>
+    function showWelcome() {
+      screenEl.innerHTML = `
+        <h2>👋 Welcome</h2>
+        <p>This is <b>EchoAI</b>, your intelligent assistant.</p>
+        <p>Tap the ⚡ button to activate.</p>
+      `;
+    }
 
-      <!-- Notifications Screen -->
-      <section id="notifications" class="screen">
-        <h2>Notifications</h2>
-        <ul id="notification-list">
-          <li>No new notifications</li>
-        </ul>
-        <button class="back-btn" data-screen="home-screen">← Back</button>
-      </section>
+    function activateEchoAI() {
+      appState.active = true;
+      setStatus("Listening");
 
-      <!-- Response Cards (for AI/voice replies) -->
-      <div id="response-cards" class="response-container"></div>
+      screenEl.innerHTML = `
+        <h2>🎧 EchoAI Active</h2>
+        <p>I am now listening and ready to help you.</p>
+        <p>More intelligence and features will be added soon.</p>
+      `;
+    }
 
-      <!-- Loading / thinking animation -->
-      <div id="ai-loading" class="glow-dots hidden">
-        <span></span><span></span><span></span>
-      </div>
+    function showHelp() {
+      setStatus("Help");
 
-      <!-- Hidden Advanced Settings -->
-      <section id="advanced-settings" class="screen hidden">
-        <h2>Advanced Settings</h2>
-        <label>
-          Debug Mode:
-          <input type="checkbox" id="debug-toggle" />
-        </label>
-        <label>
-          Voice Sensitivity:
-          <input type="range" id="voice-sensitivity" min="1" max="10" value="5"/>
-        </label>
-        <button class="back-btn" data-screen="settings">← Back</button>
-      </section>
+      screenEl.innerHTML = `
+        <h2>ℹ️ Help</h2>
+        <p>⚡ Activate EchoAI</p>
+        <p>❓ View instructions</p>
+        <p>This is the foundation version of EchoAI.</p>
+      `;
+    }
 
-      <!-- Voice Command History -->
-      <div id="voice-history" class="hidden">
-        <h3>Recent Commands</h3>
-        <ul id="history-list">
-          <li>No commands yet</li>
-        </ul>
-      </div>
+    /* -------------------------
+       EVENTS
+    ------------------------- */
+    powerBtn.addEventListener("click", () => {
+      if (!appState.active) {
+        activateEchoAI();
+      } else {
+        setStatus("Active");
+      }
+    });
 
-      <!-- Video Analyzer Settings -->
-      <div id="video-settings" class="hidden">
-        <h3>Camera Settings</h3>
-        <label>
-          Camera:
-          <select id="camera-select">
-            <option value="front">Front</option>
-            <option value="rear">Rear</option>
-          </select>
-        </label>
-        <label>
-          Resolution:
-          <select id="resolution-select">
-            <option value="720p">720p</option>
-            <option value="1080p">1080p</option>
-            <option value="4k">4K</option>
-          </select>
-        </label>
-        <label>
-          Analysis Type:
-          <select id="analysis-type">
-            <option value="general">General</option>
-            <option value="detailed">Detailed</option>
-          </select>
-        </label>
-      </div>
+    helpBtn.addEventListener("click", showHelp);
 
-      <!-- Expandable Help Panel -->
-      <div id="help-panel" class="hidden">
-        <h3>EchoAI Help</h3>
-        <p>Click on any button to see what it does. Use voice commands by pressing 🎤.</p>
-      </div>
+    /* -------------------------
+       INIT
+    ------------------------- */
+    window.onload = () => {
+      setStatus("Idle");
+      showWelcome();
+    };
+  </script>
 
-      <!-- Achievements / Easter Eggs Panel -->
-      <div id="achievements-panel" class="hidden">
-        <h3>Achievements</h3>
-        <ul id="achievements-list">
-          <li>Welcome to EchoAI! 🌟</li>
-        </ul>
-      </div>
-
-      <!-- Theme Indicator -->
-      <div id="theme-indicator" class="hidden">
-        <span id="current-theme">Futuristic Mode</span>
-      </div>
-    </div> <!-- end of screen-wrapper -->
-
-    <!-- Floating Action Buttons -->
-    <div id="fab-container">
-      <button id="fab-advanced" title="Advanced Settings">⚡</button>
-      <button id="fab-help" title="Help & Tips">❓</button>
-    </div>
-
-    <!-- Tooltips / Mini Popups -->
-    <div id="tooltip" class="hidden">
-      <p id="tooltip-text">This is a tooltip</p>
-    </div>
-
-    <!-- Glow Notifications Panel -->
-    <div id="glow-notifications" class="hidden">
-      <p id="notification-text">New alert!</p>
-    </div>
-
-    <!-- AI Thought Bubble -->
-    <div id="ai-thought-bubble" class="hidden">
-      <p id="ai-thought-text">🤖 Thinking...</p>
-    </div>
-
-    <!-- Easter Egg Trigger -->
-    <button id="easter-egg-trigger" class="hidden">💎</button>
-
-    <!-- Footer / Status Bar -->
-    <footer id="status-bar">
-      <span id="status-mode">Idle</span>
-      <span id="status-time"></span>
-    </footer>
-
-  </div> <!-- end of app -->
 </body>
 </html>
